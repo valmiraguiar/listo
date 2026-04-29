@@ -8,8 +8,8 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.valmiraguiar.listo.feature.lists.navigation.registerListEntries
 import com.valmiraguiar.listo.feature.splash.navigation.registerSplashEntry
-import com.valmiraguiar.listo.feature.tasks.navigation.registerTasksEntries
 
 @Composable
 fun ListoNavHost(
@@ -30,10 +30,7 @@ fun ListoNavHost(
                     appState.replaceAll(ListoDestination.Home)
                 },
             )
-            registerTasksEntries(
-                onOpenTask = { taskId ->
-                    appState.navigateTo(ListoDestination.TaskDetails(taskId))
-                },
+            registerListEntries(
                 onBack = appState::navigateBack,
             )
         },
