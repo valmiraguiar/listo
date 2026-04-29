@@ -1,42 +1,42 @@
 package com.valmiraguiar.listo.feature.tasks.data
 
+import android.content.Context
+import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.tasks.domain.model.Task
 import com.valmiraguiar.listo.feature.tasks.domain.model.TaskStatus
 import com.valmiraguiar.listo.feature.tasks.domain.repository.TaskRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class InMemoryTaskRepository @Inject constructor() : TaskRepository {
+class InMemoryTaskRepository @Inject constructor(
+    @param:ApplicationContext private val context: Context,
+) : TaskRepository {
 
-    private val tasks = listOf(
+    override fun getTasks(): List<Task> = listOf(
         Task(
             id = 1L,
-            title = "Definir stack base",
-            summary = "Compose + Navigation 3 + Hilt integrados.",
-            description = "A navegação agora usa rotas tipadas, ViewModels por destino " +
-                "e back stack controlada pela própria aplicação.",
+            title = context.getString(R.string.task_1_title),
+            summary = context.getString(R.string.task_1_summary),
+            description = context.getString(R.string.task_1_description),
             status = TaskStatus.Ready,
         ),
         Task(
             id = 2L,
-            title = "Organizar features",
-            summary = "Entradas de navegação registradas por feature.",
-            description = "Cada feature expõe seus destinos para o NavHost sem acoplar " +
-                "a UI ao detalhe da implementação da back stack.",
+            title = context.getString(R.string.task_2_title),
+            summary = context.getString(R.string.task_2_summary),
+            description = context.getString(R.string.task_2_description),
             status = TaskStatus.InProgress,
         ),
         Task(
             id = 3L,
-            title = "Preparar evolução",
-            summary = "Base pronta para modularização futura.",
-            description = "O contrato de repositório e os casos de uso já deixam espaço " +
-                "para trocar a fonte de dados sem mexer na camada de apresentação.",
+            title = context.getString(R.string.task_3_title),
+            summary = context.getString(R.string.task_3_summary),
+            description = context.getString(R.string.task_3_description),
             status = TaskStatus.Blocked,
         ),
     )
 
-    override fun getTasks(): List<Task> = tasks
-
-    override fun getTaskById(taskId: Long): Task? = tasks.firstOrNull { it.id == taskId }
+    override fun getTaskById(taskId: Long): Task? = getTasks().firstOrNull { it.id == taskId }
 }

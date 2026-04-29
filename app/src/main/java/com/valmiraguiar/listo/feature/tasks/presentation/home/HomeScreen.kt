@@ -21,9 +21,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
+import com.valmiraguiar.listo.R
+import com.valmiraguiar.listo.feature.tasks.domain.model.TaskStatus
 import com.valmiraguiar.listo.ui.theme.ListoTheme
 
 @Composable
@@ -57,13 +60,12 @@ fun HomeScreen(
         item {
             Column {
                 Text(
-                    text = "Arquitetura pronta para escalar",
+                    text = stringResource(id = R.string.home_title),
                     style = MaterialTheme.typography.headlineMedium,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "As rotas estao tipadas, a UI navega por contratos e cada destino " +
-                        "pode ter seu proprio ViewModel.",
+                    text = stringResource(id = R.string.home_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -103,7 +105,7 @@ private fun TaskCard(
             AssistChip(
                 onClick = onClick,
                 label = {
-                    Text(text = task.statusLabel)
+                    Text(text = stringResource(id = task.status.labelRes()))
                 },
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -132,11 +134,18 @@ private fun HomeScreenPreview() {
                         id = 1L,
                         title = "Definir stack base",
                         summary = "Compose + Navigation 3 + Hilt integrados.",
-                        statusLabel = "Pronta",
+                        status = TaskStatus.Ready,
                     ),
                 ),
             ),
             onOpenTask = {},
         )
     }
+}
+
+@Composable
+private fun TaskStatus.labelRes(): Int = when (this) {
+    TaskStatus.Ready -> R.string.task_status_ready
+    TaskStatus.InProgress -> R.string.task_status_in_progress
+    TaskStatus.Blocked -> R.string.task_status_blocked
 }

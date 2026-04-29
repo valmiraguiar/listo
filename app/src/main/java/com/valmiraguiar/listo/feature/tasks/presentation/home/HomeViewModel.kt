@@ -34,16 +34,12 @@ data class TaskCardUiModel(
     val id: Long,
     val title: String,
     val summary: String,
-    val statusLabel: String,
+    val status: TaskStatus,
 )
 
 private fun Task.toUiModel(): TaskCardUiModel = TaskCardUiModel(
     id = id,
     title = title,
     summary = summary,
-    statusLabel = when (status) {
-        TaskStatus.Ready -> "Pronta"
-        TaskStatus.InProgress -> "Em andamento"
-        TaskStatus.Blocked -> "Bloqueada"
-    },
+    status = status,
 )

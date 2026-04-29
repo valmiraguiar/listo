@@ -36,16 +36,16 @@ data class TaskDetailsUiState(
     val title: String = "",
     val summary: String = "",
     val description: String = "",
-    val statusLabel: String = "",
+    val status: TaskStatus? = null,
     val isNotFound: Boolean = false,
+    val missingTaskId: Long? = null,
 )
 
 private fun Task?.toUiState(taskId: Long): TaskDetailsUiState {
     if (this == null) {
         return TaskDetailsUiState(
-            title = "Tarefa nao encontrada",
-            description = "Nenhum item foi localizado para o id $taskId.",
             isNotFound = true,
+            missingTaskId = taskId,
         )
     }
 
@@ -53,10 +53,6 @@ private fun Task?.toUiState(taskId: Long): TaskDetailsUiState {
         title = title,
         summary = summary,
         description = description,
-        statusLabel = when (status) {
-            TaskStatus.Ready -> "Pronta"
-            TaskStatus.InProgress -> "Em andamento"
-            TaskStatus.Blocked -> "Bloqueada"
-        },
+        status = status,
     )
 }

@@ -20,11 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.ui.theme.ListoTheme
 
 @Composable
@@ -49,13 +51,13 @@ fun SplashScreen(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "Listo.",
+                text = stringResource(id = R.string.splash_title),
                 style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.primary,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Base pronta com Navigation 3, Hilt e back stack tipada.",
+                text = stringResource(id = R.string.splash_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
@@ -68,7 +70,7 @@ fun SplashScreen(
             )
             Spacer(modifier = Modifier.height(32.dp))
             Button(onClick = dropUnlessResumed(block = onContinue)) {
-                Text(text = "Entrar")
+                Text(text = stringResource(id = R.string.action_continue))
             }
         }
     }

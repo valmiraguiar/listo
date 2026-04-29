@@ -18,10 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
+import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.core.navigation.ListoDestination
+import com.valmiraguiar.listo.feature.tasks.domain.model.TaskStatus
 import com.valmiraguiar.listo.ui.theme.ListoTheme
 
 @Composable
@@ -50,6 +53,20 @@ fun TaskDetailsScreen(
     onBack: () -> Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val title = if (uiState.isNotFound) {
+        stringResource(id = R.string.task_details_not_found_title)
+    } else {
+        uiState.title
+    }
+    val description = if (uiState.isNotFound) {
+        stringResource(
+            id = R.string.task_details_not_found_description,
+            uiState.missingTaskId ?: 0L,
+        )
+    } else {
+        uiState.description
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -62,7 +79,7 @@ fun TaskDetailsScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = "Detalhe",
+                text = stringResource(id = R.string.task_details_title),
                 style = MaterialTheme.typography.headlineMedium,
             )
             OutlinedButton(
@@ -70,22 +87,22 @@ fun TaskDetailsScreen(
                     onBack()
                 },
             ) {
-                Text(text = "Voltar")
+                Text(text = stringResource(id = R.string.action_back))
             }
         }
 
-        if (!uiState.isNotFound) {
+        uiState.status?.let { status ->
             AssistChip(
                 onClick = {},
                 label = {
-                    Text(text = uiState.statusLabel)
+                    Text(text = stringResource(id = status.labelRes()))
                 },
             )
         }
 
         Column {
             Text(
-                text = uiState.title,
+                text = title,
                 style = MaterialTheme.typography.titleLarge,
             )
             if (uiState.summary.isNotBlank()) {
@@ -99,7 +116,7 @@ fun TaskDetailsScreen(
         }
 
         Text(
-            text = uiState.description,
+            text = description,
             style = MaterialTheme.typography.bodyLarge,
         )
     }
@@ -115,9 +132,16 @@ private fun TaskDetailsScreenPreview() {
                 summary = "Compose + Navigation 3 + Hilt integrados.",
                 description = "Cada tela usa um contrato proprio e pode evoluir sem acoplar " +
                     "a camada de apresentacao ao detalhe da navegacao.",
-                statusLabel = "Pronta",
+                status = TaskStatus.Ready,
             ),
             onBack = { true },
         )
     }
+}
+
+@Composable
+private fun TaskStatus.labelRes(): Int = when (this) {
+    TaskStatus.Ready -> R.string.task_status_ready
+    TaskStatus.InProgress -> R.string.task_status_in_progress
+    TaskStatus.Blocked -> R.string.task_status_blocked
 }
