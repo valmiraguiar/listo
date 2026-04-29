@@ -1,0 +1,14 @@
+package com.valmiraguiar.listo.feature.splash.navigation
+
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import com.valmiraguiar.listo.core.navigation.ListoDestination
+import com.valmiraguiar.listo.feature.splash.presentation.SplashScreen
+
+fun EntryProviderScope<NavKey>.registerSplashEntry(
+    onContinue: () -> Unit,
+) {
+    entry<ListoDestination.Splash> {
+        SplashScreen(onContinue = onContinue)
+    }
+}

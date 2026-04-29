@@ -67,9 +67,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     // Navigation
-    implementation(libs.androidx.navigation)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
 
     // Network
@@ -79,13 +79,12 @@ dependencies {
 
     // Dagger/Hilt
     implementation(libs.dagger.hilt.android)
-    implementation(libs.hilt.navigation.compose)
+    implementation(libs.hilt.lifecycle.viewmodel.compose)
     ksp(libs.dagger.hilt.compiler)
 
     // RoomDB
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 
     // Coroutines
