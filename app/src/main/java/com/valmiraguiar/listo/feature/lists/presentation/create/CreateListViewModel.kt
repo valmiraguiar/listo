@@ -124,23 +124,3 @@ class CreateListViewModel @Inject constructor(
         )
     }
 }
-
-@Immutable
-data class CreateListUiState(
-    val listTitle: String = "",
-    val items: List<DraftListItemUiState> = emptyList(),
-    val isSaving: Boolean = false,
-    val saveConfirmationVisible: Boolean = false,
-) {
-    val canSubmit: Boolean
-        get() = listTitle.isNotBlank() && items.any { it.description.isNotBlank() } && !isSaving
-}
-
-@Immutable
-data class DraftListItemUiState(
-    val id: Long,
-    val quantity: String,
-    val unit: UnitOption,
-    val description: String,
-    val category: ListCategory,
-)

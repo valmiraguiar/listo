@@ -27,7 +27,7 @@ fun ListoNavHost(
         entryProvider = entryProvider<NavKey> {
             registerSplashEntry(
                 onContinue = {
-                    appState.replaceAll(ListoDestination.Home)
+                    appState.replaceAll(ListoDestination.CreateList)
                 },
             )
             registerListEntries(

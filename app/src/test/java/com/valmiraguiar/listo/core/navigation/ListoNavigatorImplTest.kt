@@ -13,10 +13,10 @@ class ListoNavigatorImplTest {
         val backStack = mutableListOf<NavKey>(ListoDestination.Splash)
         val navigator = ListoNavigatorImpl(backStack)
 
-        navigator.navigateTo(ListoDestination.Home)
+        navigator.navigateTo(ListoDestination.CreateList)
 
         assertEquals(
-            listOf(ListoDestination.Splash, ListoDestination.Home),
+            listOf(ListoDestination.Splash, ListoDestination.CreateList),
             backStack,
         )
     }
@@ -25,7 +25,7 @@ class ListoNavigatorImplTest {
     fun `replaceAll keeps only the new root destination`() {
         val backStack = mutableListOf<NavKey>(
             ListoDestination.Splash,
-            ListoDestination.Home,
+            ListoDestination.CreateList,
         )
         val navigator = ListoNavigatorImpl(backStack)
 
@@ -41,7 +41,7 @@ class ListoNavigatorImplTest {
     fun `navigateBack pops when there is previous destination`() {
         val backStack = mutableListOf<NavKey>(
             ListoDestination.Splash,
-            ListoDestination.Home,
+            ListoDestination.CreateList,
         )
         val navigator = ListoNavigatorImpl(backStack)
 

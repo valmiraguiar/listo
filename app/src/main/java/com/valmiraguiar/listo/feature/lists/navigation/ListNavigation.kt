@@ -8,7 +8,7 @@ import com.valmiraguiar.listo.feature.lists.presentation.create.CreateListRoute
 fun EntryProviderScope<NavKey>.registerListEntries(
     onBack: () -> Boolean,
 ) {
-    entry<ListoDestination.Home> {
+    entry<ListoDestination.CreateList> {
         CreateListRoute(onBack = onBack)
     }
 }
