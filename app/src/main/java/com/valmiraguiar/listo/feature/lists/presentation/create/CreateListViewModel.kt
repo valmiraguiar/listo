@@ -1,12 +1,11 @@
 package com.valmiraguiar.listo.feature.lists.presentation.create
 
-import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.valmiraguiar.listo.feature.lists.domain.model.ListCategory
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraftItem
-import com.valmiraguiar.listo.feature.lists.domain.model.UnitOption
+import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.lists.domain.usecase.CreateShoppingListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +35,7 @@ class CreateListViewModel @Inject constructor(
         updateItem(itemId) { item -> item.copy(quantity = quantity) }
     }
 
-    fun updateItemUnit(itemId: Long, unit: UnitOption) {
+    fun updateItemUnit(itemId: Long, unit: UnitEnum) {
         updateItem(itemId) { item -> item.copy(unit = unit) }
     }
 
@@ -44,8 +43,8 @@ class CreateListViewModel @Inject constructor(
         updateItem(itemId) { item -> item.copy(description = description) }
     }
 
-    fun updateItemCategory(itemId: Long, category: ListCategory) {
-        updateItem(itemId) { item -> item.copy(category = category) }
+    fun updateItemCategory(itemId: Long, categoryEnum: CategoryEnum) {
+        updateItem(itemId) { item -> item.copy(categoryEnum = categoryEnum) }
     }
 
     fun addItem() {
@@ -80,7 +79,7 @@ class CreateListViewModel @Inject constructor(
                             quantity = item.quantity.trim(),
                             unit = item.unit,
                             description = item.description.trim(),
-                            category = item.category,
+                            categoryEnum = item.categoryEnum,
                         )
                     },
                 ),
@@ -118,9 +117,9 @@ class CreateListViewModel @Inject constructor(
         return DraftListItemUiState(
             id = id,
             quantity = "",
-            unit = UnitOption.Unit,
+            unit = UnitEnum.Unit,
             description = "",
-            category = ListCategory.Grocery,
+            categoryEnum = CategoryEnum.Grocery,
         )
     }
 }

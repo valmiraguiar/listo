@@ -7,7 +7,7 @@ data class ShoppingListDraft(
 
 data class ShoppingListDraftItem(
     val quantity: String,
-    val unit: UnitOption,
+    val unit: UnitEnum,
     val description: String,
-    val category: ListCategory,
+    val categoryEnum: CategoryEnum,
 )

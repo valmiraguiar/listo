@@ -1,19 +1,19 @@
 package com.valmiraguiar.listo.feature.lists.data.local.converter
 
 import androidx.room.TypeConverter
-import com.valmiraguiar.listo.feature.lists.domain.model.ListCategory
-import com.valmiraguiar.listo.feature.lists.domain.model.UnitOption
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
+import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 
 class ListTypeConverters {
     @TypeConverter
-    fun fromCategory(value: ListCategory): String = value.name
+    fun fromCategory(value: CategoryEnum): String = value.name
 
     @TypeConverter
-    fun toCategory(value: String): ListCategory = ListCategory.valueOf(value)
+    fun toCategory(value: String): CategoryEnum = CategoryEnum.valueOf(value)
 
     @TypeConverter
-    fun fromUnit(value: UnitOption): String = value.name
+    fun fromUnit(value: UnitEnum): String = value.name
 
     @TypeConverter
-    fun toUnit(value: String): UnitOption = UnitOption.valueOf(value)
+    fun toUnit(value: String): UnitEnum = UnitEnum.valueOf(value)
 }

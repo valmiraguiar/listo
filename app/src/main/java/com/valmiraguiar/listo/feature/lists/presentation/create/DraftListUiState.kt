@@ -1,12 +1,12 @@
 package com.valmiraguiar.listo.feature.lists.presentation.create
 
-import com.valmiraguiar.listo.feature.lists.domain.model.ListCategory
-import com.valmiraguiar.listo.feature.lists.domain.model.UnitOption
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
+import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 
 data class DraftListItemUiState(
     val id: Long,
     val quantity: String,
-    val unit: UnitOption,
+    val unit: UnitEnum,
     val description: String,
-    val category: ListCategory,
+    val categoryEnum: CategoryEnum,
 )

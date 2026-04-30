@@ -63,8 +63,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
-import com.valmiraguiar.listo.feature.lists.domain.model.ListCategory
-import com.valmiraguiar.listo.feature.lists.domain.model.UnitOption
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
+import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.ui.theme.ListoTheme
 
 @Composable
@@ -109,9 +109,9 @@ fun CreateListScreen(
     onBack: () -> Boolean,
     onListTitleChange: (String) -> Unit,
     onQuantityChange: (Long, String) -> Unit,
-    onUnitSelected: (Long, UnitOption) -> Unit,
+    onUnitSelected: (Long, UnitEnum) -> Unit,
     onDescriptionChange: (Long, String) -> Unit,
-    onCategorySelected: (Long, ListCategory) -> Unit,
+    onCategorySelected: (Long, CategoryEnum) -> Unit,
     onAddItem: () -> Unit,
     onRemoveItem: (Long) -> Unit,
     onCreateList: () -> Unit,
@@ -267,9 +267,9 @@ private fun ItemEditorCard(
     index: Int,
     item: DraftListItemUiState,
     onQuantityChange: (String) -> Unit,
-    onUnitSelected: (UnitOption) -> Unit,
+    onUnitSelected: (UnitEnum) -> Unit,
     onDescriptionChange: (String) -> Unit,
-    onCategorySelected: (ListCategory) -> Unit,
+    onCategorySelected: (CategoryEnum) -> Unit,
     onRemoveItem: (Long) -> Unit,
 ) {
     Surface(
@@ -329,9 +329,9 @@ private fun ItemEditorCard(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                ListCategory.entries.forEach { category ->
+                CategoryEnum.entries.forEach { category ->
                     FilterChip(
-                        selected = item.category == category,
+                        selected = item.categoryEnum == category,
                         onClick = { onCategorySelected(category) },
                         label = {
                             Text(text = stringResource(id = category.labelRes()))
@@ -349,8 +349,8 @@ private fun ItemEditorCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UnitDropdown(
-    selected: UnitOption,
-    onUnitSelected: (UnitOption) -> Unit,
+    selected: UnitEnum,
+    onUnitSelected: (UnitEnum) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -379,7 +379,7 @@ private fun UnitDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            UnitOption.entries.forEach { unit ->
+            UnitEnum.entries.forEach { unit ->
                 DropdownMenuItem(
                     text = {
                         Text(text = stringResource(id = unit.labelRes()))
@@ -467,21 +467,21 @@ private fun UnderlinedTextField(
 }
 
 @Composable
-private fun UnitOption.labelRes(): Int = when (this) {
-    UnitOption.Unit -> R.string.unit_un
-    UnitOption.Kilogram -> R.string.unit_kg
-    UnitOption.Gram -> R.string.unit_g
-    UnitOption.Liter -> R.string.unit_l
-    UnitOption.Milliliter -> R.string.unit_ml
-    UnitOption.Pack -> R.string.unit_pack
+private fun UnitEnum.labelRes(): Int = when (this) {
+    UnitEnum.Unit -> R.string.unit_un
+    UnitEnum.Kilogram -> R.string.unit_kg
+    UnitEnum.Gram -> R.string.unit_g
+    UnitEnum.Liter -> R.string.unit_l
+    UnitEnum.Milliliter -> R.string.unit_ml
+    UnitEnum.Pack -> R.string.unit_pack
 }
 
 @Composable
-private fun ListCategory.labelRes(): Int = when (this) {
-    ListCategory.Beverages -> R.string.category_beverages
-    ListCategory.Grocery -> R.string.category_grocery
-    ListCategory.Dairy -> R.string.category_dairy
-    ListCategory.Meat -> R.string.category_meat
+private fun CategoryEnum.labelRes(): Int = when (this) {
+    CategoryEnum.Beverages -> R.string.category_beverages
+    CategoryEnum.Grocery -> R.string.category_grocery
+    CategoryEnum.Dairy -> R.string.category_dairy
+    CategoryEnum.Meat -> R.string.category_meat
 }
 
 @Preview(showBackground = true)
@@ -495,16 +495,16 @@ private fun CreateListScreenPreview() {
                     DraftListItemUiState(
                         id = 1L,
                         quantity = "2",
-                        unit = UnitOption.Kilogram,
+                        unit = UnitEnum.Kilogram,
                         description = "Picanha",
-                        category = ListCategory.Meat,
+                        categoryEnum = CategoryEnum.Meat,
                     ),
                     DraftListItemUiState(
                         id = 2L,
                         quantity = "6",
-                        unit = UnitOption.Unit,
+                        unit = UnitEnum.Unit,
                         description = "Refrigerante",
-                        category = ListCategory.Beverages,
+                        categoryEnum = CategoryEnum.Beverages,
                     ),
                 ),
             ),
