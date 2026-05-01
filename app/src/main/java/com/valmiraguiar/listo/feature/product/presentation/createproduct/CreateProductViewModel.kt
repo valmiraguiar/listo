@@ -1,9 +1,8 @@
-package com.valmiraguiar.listo.feature.product.presentation
+package com.valmiraguiar.listo.feature.product.presentation.createproduct
 
 import androidx.lifecycle.ViewModel
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

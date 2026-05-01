@@ -1,4 +1,4 @@
-package com.valmiraguiar.listo.feature.product.presentation
+package com.valmiraguiar.listo.feature.product.presentation.createproduct
 
 import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum

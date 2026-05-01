@@ -1,4 +1,4 @@
-package com.valmiraguiar.listo.feature.product.presentation
+package com.valmiraguiar.listo.feature.product.presentation.createproduct
 
 data class CreateProductUiState(
     val items: List<DraftListItemUiState> = emptyList(),
