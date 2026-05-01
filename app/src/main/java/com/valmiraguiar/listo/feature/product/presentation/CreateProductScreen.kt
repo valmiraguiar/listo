@@ -92,42 +92,49 @@ fun CreateProductScreen(
             .navigationBarsPadding(),
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxSize().padding(top = 32.dp),
         ) {
-            uiState.items.forEachIndexed { index, item ->
-                ItemEditorCard(
+            Column(
+                verticalArrangement = Arrangement.spacedBy(18.dp),
+            ) {
+                uiState.items.forEachIndexed { index, item ->
+                    ItemEditorCard(
 //                    index = index + 1,
-                    item = item,
-                    onQuantityChange = { quantity ->
-                        onQuantityChange(item.id, quantity)
-                    },
-                    onUnitSelected = { unit ->
-                        onUnitSelected(item.id, unit)
-                    },
-                    onDescriptionChange = { description ->
-                        onDescriptionChange(item.id, description)
-                    },
-                    onCategorySelected = { category ->
-                        onCategorySelected(item.id, category)
-                    },
-                    onRemoveItem = onRemoveItem
+                        item = item,
+                        onQuantityChange = { quantity ->
+                            onQuantityChange(item.id, quantity)
+                        },
+                        onUnitSelected = { unit ->
+                            onUnitSelected(item.id, unit)
+                        },
+                        onDescriptionChange = { description ->
+                            onDescriptionChange(item.id, description)
+                        },
+                        onCategorySelected = { category ->
+                            onCategorySelected(item.id, category)
+                        },
+                        onRemoveItem = onRemoveItem
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = dropUnlessResumed(block = onAddItem),
+                shape = RoundedCornerShape(18.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.primary,
+                ),
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.create_list_add_item),
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            onClick = dropUnlessResumed(block = onAddItem),
-            shape = RoundedCornerShape(18.dp),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.primary,
-            ),
-        ) {
-            Text(
-                text = stringResource(id = R.string.create_list_add_item),
-                style = MaterialTheme.typography.titleMedium,
-            )
         }
     }
 }
@@ -169,14 +176,6 @@ private fun ItemEditorCard(
                         selected = item.unit,
                         onUnitSelected = onUnitSelected,
                         modifier = Modifier.width(110.dp),
-                    )
-                }
-
-                IconButton(onClick = { onRemoveItem(item.id) }, modifier = Modifier) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = stringResource(id = R.string.action_back),
-                        tint = Color.Red,
                     )
                 }
             }
