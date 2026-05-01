@@ -1,4 +1,4 @@
-package com.valmiraguiar.listo.feature.lists.domain.model
+package com.valmiraguiar.listo.feature.product.domain.model
 
 enum class CategoryEnum(val id: Long) {
     Beverages(id = 1),

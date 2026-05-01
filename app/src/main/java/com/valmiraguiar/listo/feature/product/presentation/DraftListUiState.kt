@@ -1,6 +1,6 @@
-package com.valmiraguiar.listo.feature.lists.presentation.create
+package com.valmiraguiar.listo.feature.product.presentation
 
-import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
+import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 
 data class DraftListItemUiState(

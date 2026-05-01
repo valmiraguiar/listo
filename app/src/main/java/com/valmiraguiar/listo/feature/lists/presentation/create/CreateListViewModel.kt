@@ -2,10 +2,8 @@ package com.valmiraguiar.listo.feature.lists.presentation.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraftItem
-import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.lists.domain.usecase.CreateShoppingListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,42 +20,12 @@ class CreateListViewModel @Inject constructor(
 
     private var nextItemId = 1L
 
-    private val _uiState = MutableStateFlow(CreateListUiState(items = listOf(newDraftItem())))
+    private val _uiState = MutableStateFlow(CreateListUiState(items = listOf()))
     val uiState: StateFlow<CreateListUiState> = _uiState.asStateFlow()
 
     fun updateListTitle(title: String) {
         _uiState.update { current ->
             current.copy(listTitle = title)
-        }
-    }
-
-    fun updateItemQuantity(itemId: Long, quantity: String) {
-        updateItem(itemId) { item -> item.copy(quantity = quantity) }
-    }
-
-    fun updateItemUnit(itemId: Long, unit: UnitEnum) {
-        updateItem(itemId) { item -> item.copy(unit = unit) }
-    }
-
-    fun updateItemDescription(itemId: Long, description: String) {
-        updateItem(itemId) { item -> item.copy(description = description) }
-    }
-
-    fun updateItemCategory(itemId: Long, categoryEnum: CategoryEnum) {
-        updateItem(itemId) { item -> item.copy(categoryEnum = categoryEnum) }
-    }
-
-    fun addItem() {
-        _uiState.update { current ->
-            current.copy(items = current.items + newDraftItem())
-        }
-    }
-
-    fun removeItem(itemId: Long) {
-        _uiState.update { current ->
-            current.copy(items = current.items.filter { item ->
-                item.id != itemId
-            })
         }
     }
 
@@ -86,7 +54,7 @@ class CreateListViewModel @Inject constructor(
             )
 
             _uiState.value = CreateListUiState(
-                items = listOf(newDraftItem()),
+                items = listOf(),
                 saveConfirmationVisible = true,
             )
         }
@@ -98,28 +66,4 @@ class CreateListViewModel @Inject constructor(
         }
     }
 
-    private fun updateItem(
-        itemId: Long,
-        transform: (DraftListItemUiState) -> DraftListItemUiState,
-    ) {
-        _uiState.update { current ->
-            current.copy(
-                items = current.items.map { item ->
-                    if (item.id == itemId) transform(item) else item
-                },
-            )
-        }
-    }
-
-    private fun newDraftItem(): DraftListItemUiState {
-        val id = nextItemId
-        nextItemId += 1
-        return DraftListItemUiState(
-            id = id,
-            quantity = "",
-            unit = UnitEnum.Unit,
-            description = "",
-            categoryEnum = CategoryEnum.Grocery,
-        )
-    }
 }
