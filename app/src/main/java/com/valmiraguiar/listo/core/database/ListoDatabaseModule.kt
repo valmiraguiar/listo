@@ -2,8 +2,8 @@ package com.valmiraguiar.listo.core.database
 
 import android.content.Context
 import androidx.room.Room
-import com.valmiraguiar.listo.feature.lists.data.local.dao.CategoryDao
 import com.valmiraguiar.listo.feature.lists.data.ShoppingListRepositoryImpl
+import com.valmiraguiar.listo.feature.lists.data.local.dao.CategoryDao
 import com.valmiraguiar.listo.feature.lists.data.local.dao.ShoppingListDao
 import com.valmiraguiar.listo.feature.lists.data.local.datasource.ShoppingListLocalDataSource
 import com.valmiraguiar.listo.feature.lists.data.local.datasource.ShoppingListLocalDataSourceImpl

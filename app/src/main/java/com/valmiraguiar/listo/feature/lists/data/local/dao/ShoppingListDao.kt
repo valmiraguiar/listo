@@ -26,6 +26,15 @@ interface ShoppingListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShoppingListProduct(ref: List<ShoppingListProductEntity>)
 
+    @Query(
+        """
+        SELECT *
+        FROM shopping_lists
+        ORDER BY created_at DESC
+        """,
+    )
+    fun observeShoppingLists(): Flow<List<ShoppingListEntity>>
+
     @Transaction
     suspend fun insertShoppingListWithItems(
         list: ShoppingListEntity,

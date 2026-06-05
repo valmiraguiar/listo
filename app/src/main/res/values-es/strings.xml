@@ -18,6 +18,10 @@
     <string name="create_list_add_item">Agregar ítem</string>
     <string name="create_list_cta">Crear lista</string>
     <string name="create_list_saved_message">Lista creada y guardada localmente.</string>
+    <string name="shopping_lists_title">Mis listas</string>
+    <string name="shopping_lists_empty">Aún no se creó ninguna lista.</string>
+    <string name="shopping_lists_create">Crear lista</string>
+    <string name="shopping_list_details_title">Detalles de la lista</string>
     <string name="category_beverages">Bebidas</string>
     <string name="category_grocery">Mercado</string>
     <string name="category_dairy">Fiambres</string>

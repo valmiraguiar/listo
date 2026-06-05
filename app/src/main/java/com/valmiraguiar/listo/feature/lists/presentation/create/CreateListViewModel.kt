@@ -65,5 +65,4 @@ class CreateListViewModel @Inject constructor(
             current.copy(saveConfirmationVisible = false)
         }
     }
-
 }

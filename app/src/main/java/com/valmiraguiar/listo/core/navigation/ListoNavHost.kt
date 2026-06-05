@@ -27,11 +27,19 @@ fun ListoNavHost(
         entryProvider = entryProvider<NavKey> {
             registerSplashEntry(
                 onContinue = {
-                    appState.replaceAll(ListoDestination.CreateList)
+                    appState.replaceAll(ListoDestination.ShoppingLists)
                 },
             )
             registerListEntries(
                 onBack = appState::navigateBack,
+                onCreateListClick = {
+                    appState.navigateTo(ListoDestination.CreateList)
+                },
+                onShoppingListClick = { shoppingListId ->
+                    appState.navigateTo(
+                        ListoDestination.ShoppingListDetails(shoppingListId = shoppingListId),
+                    )
+                },
             )
         },
     )

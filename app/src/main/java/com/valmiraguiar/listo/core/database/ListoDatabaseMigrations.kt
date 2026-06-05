@@ -3,11 +3,12 @@ package com.valmiraguiar.listo.core.database
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+/**
+ *  This migration is used when database is updated.
+ */
 object ListoDatabaseMigrations {
     val MIGRATION_1_2 = object : Migration(1, 2) {
-
         override fun migrate(db: SupportSQLiteDatabase) {
-
             createCategoryTable(db)
             createProductsTable(db)
             createShoppingListProductTable(db)
@@ -53,7 +54,6 @@ object ListoDatabaseMigrations {
     }
 
     private fun createShoppingListProductTable(db: SupportSQLiteDatabase) {
-
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS shopping_list_product (

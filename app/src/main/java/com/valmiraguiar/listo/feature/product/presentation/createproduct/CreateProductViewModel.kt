@@ -66,9 +66,11 @@ class CreateProductViewModel : ViewModel() {
 
     fun removeItem(itemId: Long) {
         _uiState.update { current ->
-            current.copy(items = current.items.filter { item ->
-                item.id != itemId
-            })
+            current.copy(
+                items = current.items.filter { item ->
+                    item.id != itemId
+                }
+            )
         }
     }
 }

@@ -39,8 +39,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.UnderlinedTextField
-import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
+import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.product.presentation.createproduct.DraftListItemUiState
 import com.valmiraguiar.listo.ui.theme.ListoTheme
 
@@ -111,10 +111,7 @@ fun CreateListScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
                 LabeledSection(title = stringResource(id = R.string.create_list_items_label)) {
-
                 }
-
-
 
                 Spacer(modifier = Modifier.height(28.dp))
                 Button(
@@ -191,10 +188,6 @@ private fun LabeledSection(
         content()
     }
 }
-
-
-
-
 
 @Preview(showBackground = true)
 @Composable

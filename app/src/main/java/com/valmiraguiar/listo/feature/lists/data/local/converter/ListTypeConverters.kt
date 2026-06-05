@@ -1,8 +1,8 @@
 package com.valmiraguiar.listo.feature.lists.data.local.converter
 
 import androidx.room.TypeConverter
-import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
+import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 
 class ListTypeConverters {
     @TypeConverter

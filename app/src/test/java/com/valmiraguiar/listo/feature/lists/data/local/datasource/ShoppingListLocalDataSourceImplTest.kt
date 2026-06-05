@@ -1,12 +1,12 @@
 package com.valmiraguiar.listo.feature.lists.data.local.datasource
 
 import com.valmiraguiar.listo.feature.lists.data.local.dao.ShoppingListDao
-import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListEntity
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ProductEntity
-import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
+import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListEntity
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraftItem
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
+import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

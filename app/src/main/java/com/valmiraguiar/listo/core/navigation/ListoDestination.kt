@@ -8,7 +8,13 @@ sealed interface ListoDestination : NavKey {
     data object Splash : ListoDestination
 
     @Serializable
+    data object ShoppingLists : ListoDestination
+
+    @Serializable
     data object CreateList : ListoDestination
+
+    @Serializable
+    data class ShoppingListDetails(val shoppingListId: Long) : ListoDestination
 
     @Serializable
     data class TaskDetails(val taskId: Long) : ListoDestination
