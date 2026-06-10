@@ -20,7 +20,7 @@ class ShoppingListsViewModel @Inject constructor(
         .map { shoppingLists ->
             ShoppingListsUiState(
                 isLoading = false,
-                shoppingLists = shoppingLists.map { shoppingList ->
+                shoppingLists = MOCK.map { shoppingList -> // TODO - Remove mock when database is configured
                     shoppingList.toUiItem()
                 },
             )
@@ -36,6 +36,36 @@ class ShoppingListsViewModel @Inject constructor(
             id = id,
             title = title,
             createdAt = createdAt,
+        )
+    }
+
+    private companion object {
+        val MOCK = listOf(
+            ShoppingListSummary(
+                id = 1L,
+                title = "Teste1",
+                createdAt = 1_784_324_400_000L
+            ),
+            ShoppingListSummary(
+                id = 2L,
+                title = "Teste2",
+                createdAt = 1_784_324_400_000L
+            ),
+            ShoppingListSummary(
+                id = 3L,
+                title = "Teste3",
+                createdAt = 1_784_324_400_000L
+            ),
+            ShoppingListSummary(
+                id = 4L,
+                title = "Teste4",
+                createdAt = 1_784_324_400_000L
+            ),
+            ShoppingListSummary(
+                id = 5L,
+                title = "Teste5",
+                createdAt = 1_784_324_400_000L
+            )
         )
     }
 }

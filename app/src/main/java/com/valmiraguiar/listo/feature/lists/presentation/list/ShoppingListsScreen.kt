@@ -3,7 +3,9 @@ package com.valmiraguiar.listo.feature.lists.presentation.list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,14 +13,14 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -161,31 +163,44 @@ private fun ShoppingListCard(
         dateFormatter.format(Date(shoppingList.createdAt))
     }
 
-    Card(
+    OutlinedCard(
         onClick = dropUnlessResumed {
             onClick(shoppingList.id)
         },
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-        ),
     ) {
-        Text(
-            text = shoppingList.title,
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 18.dp, top = 16.dp, end = 18.dp),
-            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        Text(
-            text = createdAtText,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 18.dp, top = 6.dp, end = 18.dp, bottom = 16.dp),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+                .padding(end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = shoppingList.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 18.dp, top = 16.dp, end = 18.dp),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = createdAtText,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 18.dp, top = 6.dp, end = 18.dp, bottom = 16.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = "navigation item"
+            )
+        }
     }
 }
 
@@ -204,6 +219,11 @@ private fun ShoppingListsScreenPreview() {
                     ),
                     ShoppingListUiItem(
                         id = 2L,
+                        title = "Churrasco de domingo",
+                        createdAt = 1_784_238_000_000L,
+                    ),
+                    ShoppingListUiItem(
+                        id = 3L,
                         title = "Churrasco de domingo",
                         createdAt = 1_784_238_000_000L,
                     ),

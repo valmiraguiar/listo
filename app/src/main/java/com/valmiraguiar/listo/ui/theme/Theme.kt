@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
     surface = Surface,
     onSurface = OnSurface,
     surfaceVariant = SurfaceVariant,
-    onSurfaceVariant = OnSurface,
+    onSurfaceVariant = OnSurfaceVariant,
     outline = Outline
 )
 
