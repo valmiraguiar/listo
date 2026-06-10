@@ -37,6 +37,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
+import com.valmiraguiar.listo.feature.common.components.ListoTopBar
 import com.valmiraguiar.listo.ui.theme.ListoTheme
 import java.text.DateFormat
 import java.util.Date
@@ -72,11 +73,7 @@ fun ShoppingListsScreen(
             .background(MaterialTheme.colorScheme.background)
             .safeDrawingPadding(),
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.shopping_lists_title))
-                },
-            )
+            ListoTopBar()
         },
         floatingActionButton = {
             FloatingActionButton(
