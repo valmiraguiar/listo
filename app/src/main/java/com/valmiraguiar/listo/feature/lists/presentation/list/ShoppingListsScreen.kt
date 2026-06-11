@@ -1,6 +1,5 @@
 package com.valmiraguiar.listo.feature.lists.presentation.list
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,21 +8,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,7 +31,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
-import com.valmiraguiar.listo.feature.common.components.ListoTopBar
 import com.valmiraguiar.listo.ui.theme.ListoTheme
 import java.text.DateFormat
 import java.util.Date
@@ -67,33 +60,33 @@ fun ShoppingListsScreen(
     onCreateListClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .safeDrawingPadding(),
-        topBar = {
-            ListoTopBar()
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = dropUnlessResumed(block = onCreateListClick),
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = stringResource(id = R.string.shopping_lists_create),
-                )
-            }
-        },
-    ) { contentPadding ->
-        ShoppingListsContent(
-            uiState = uiState,
-            onShoppingListClick = onShoppingListClick,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding),
-        )
-    }
+//    Scaffold(
+//        modifier = modifier
+//            .fillMaxSize()
+//            .background(MaterialTheme.colorScheme.background)
+//            .safeDrawingPadding(),
+//        topBar = {
+//            ListoTopBar()
+//        },
+//        floatingActionButton = {
+//            FloatingActionButton(
+//                onClick = dropUnlessResumed(block = onCreateListClick),
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.Add,
+//                    contentDescription = stringResource(id = R.string.shopping_lists_create),
+//                )
+//            }
+//        },
+//    ) { contentPadding ->
+// TODO - Add the FAB again
+    ShoppingListsContent(
+        uiState = uiState,
+        onShoppingListClick = onShoppingListClick,
+        modifier = Modifier
+            .fillMaxSize(),
+    )
+//    }
 }
 
 @Composable
