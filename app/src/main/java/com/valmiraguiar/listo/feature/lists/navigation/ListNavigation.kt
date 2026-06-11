@@ -8,7 +8,7 @@ import com.valmiraguiar.listo.feature.lists.presentation.details.ShoppingListDet
 import com.valmiraguiar.listo.feature.lists.presentation.list.ShoppingListsRoute
 
 fun EntryProviderScope<NavKey>.registerListEntries(
-    onBack: () -> Boolean,
+    onBack: () -> Unit,
     onCreateListClick: () -> Unit,
     onShoppingListClick: (Long) -> Unit,
 ) {

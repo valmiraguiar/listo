@@ -47,4 +47,5 @@
     <string name="task_3_title">Preparar la evolución</string>
     <string name="task_3_summary">Base lista para una futura modularización.</string>
     <string name="task_3_description">El contrato del repositorio y los casos de uso ya dejan espacio para cambiar la fuente de datos sin tocar la capa de presentación.</string>
+    <string name="detail_list_add_item">Agregar elemento</string>
 </resources>

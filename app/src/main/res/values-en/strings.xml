@@ -47,4 +47,5 @@
     <string name="task_3_title">Prepare future growth</string>
     <string name="task_3_summary">Foundation ready for future modularization.</string>
     <string name="task_3_description">The repository contract and use cases already leave room to swap the data source without changing the presentation layer.</string>
+    <string name="detail_list_add_item">Add item</string>
 </resources>

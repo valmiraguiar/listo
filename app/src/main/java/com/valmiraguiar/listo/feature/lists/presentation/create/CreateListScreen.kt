@@ -46,7 +46,7 @@ import com.valmiraguiar.listo.ui.theme.ListoTheme
 
 @Composable
 fun CreateListRoute(
-    onBack: () -> Boolean,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CreateListViewModel = hiltViewModel(),
 ) {
@@ -77,7 +77,7 @@ fun CreateListRoute(
 fun CreateListScreen(
     uiState: CreateListUiState,
     snackbarHostState: SnackbarHostState,
-    onBack: () -> Boolean,
+    onBack: () -> Unit,
     onListTitleChange: (String) -> Unit,
 
     onCreateList: () -> Unit,
@@ -144,11 +144,44 @@ fun CreateListScreen(
                 .padding(16.dp),
         )
     }
+    
+    /*
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Details route")
+
+        FloatingActionButton(
+            onClick = {},
+            containerColor = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(8.dp),
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add item list",
+                    modifier = Modifier.size(16.dp),
+                )
+
+                Text(text = stringResource(R.string.detail_list_add_item))
+            }
+        }
+    }
+     */
+    // TODO - Fix this screen
 }
 
 @Composable
 private fun CreateListTopBar(
-    onBack: () -> Boolean,
+    onBack: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxWidth(),
