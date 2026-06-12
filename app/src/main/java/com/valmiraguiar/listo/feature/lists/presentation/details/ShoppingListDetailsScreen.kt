@@ -1,5 +1,6 @@
 package com.valmiraguiar.listo.feature.lists.presentation.details
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,9 +13,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Checkbox
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -90,14 +95,26 @@ private fun ShoppingListDetailsContent(
             items(
                 items = shoppingItems,
                 key = { item -> item.id },
-                contentType = { "shopping-list-item" },
+                contentType = { "shopping-list" },
             ) { item ->
-                ShoppingListItem(
-                    item = item,
-                    onCheckedChange = { isChecked ->
-                        onCheckedChange(item, isChecked)
-                    },
-                )
+                Column(
+                    modifier = Modifier.animateItem(
+                        placementSpec = tween(durationMillis = ITEM_PLACEMENT_ANIMATION_DURATION),
+                    ),
+                ) {
+                    ShoppingListItem(
+                        item = item,
+                        onCheckedChange = { isChecked ->
+                            onCheckedChange(item, isChecked)
+                        },
+                    )
+
+                    if (item != shoppingItems.last()) {
+                        HorizontalDivider(
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = DIVIDER_ALPHA),
+                        )
+                    }
+                }
             }
         }
     }
@@ -115,10 +132,27 @@ private fun ShoppingListItem(
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Checkbox(
+        IconToggleButton(
             checked = item.isChecked,
             onCheckedChange = onCheckedChange,
-        )
+            colors = IconButtonDefaults.iconToggleButtonColors(
+                contentColor = MaterialTheme.colorScheme.outline,
+                checkedContentColor = MaterialTheme.colorScheme.primary,
+            ),
+        ) {
+            Icon(
+                imageVector = if (item.isChecked) {
+                    Icons.Filled.CheckCircle
+                } else {
+                    Icons.Outlined.Circle
+                },
+                contentDescription = if (item.isChecked) {
+                    "Desmarcar item"
+                } else {
+                    "Marcar item"
+                },
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -151,6 +185,9 @@ private data class ShoppingListDetailsItem(
     val classification: String,
     val isChecked: Boolean = false,
 )
+
+private const val ITEM_PLACEMENT_ANIMATION_DURATION = 250
+private const val DIVIDER_ALPHA = 0.35f
 
 private val MOCK_ITEMS = listOf(
     ShoppingListDetailsItem(id = 1L, title = "Arroz", classification = "Mercearia"),

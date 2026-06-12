@@ -45,7 +45,7 @@ val Typography = Typography(
     ),
     bodyLarge = TextStyle(
         fontFamily = PoppinsFontFamily,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),
