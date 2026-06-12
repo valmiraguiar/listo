@@ -62,7 +62,7 @@ fun ListoTopBar(
 )
 @Composable
 private fun ListoTopBarPreview() {
-    ListoTheme() {
+    ListoTheme {
         ListoTopBar()
     }
 }

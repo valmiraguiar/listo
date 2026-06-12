@@ -144,7 +144,7 @@ fun CreateListScreen(
                 .padding(16.dp),
         )
     }
-    
+
     /*
     Box(
         modifier = modifier
