@@ -3,42 +3,20 @@ package com.valmiraguiar.listo.core.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import androidx.navigation3.runtime.NavBackStack
-import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.rememberNavBackStack
+import com.valmiraguiar.listo.feature.splash.navigation.SplashKey
 
 @Stable
 class ListoAppState internal constructor(
-    val backStack: NavBackStack<NavKey>,
-    private val navigator: ListoNavigator,
-) {
-    val canNavigateBack: Boolean
-        get() = navigator.canNavigateBack
-
-    fun navigateTo(destination: ListoDestination) {
-        navigator.navigateTo(destination)
-    }
-
-    fun replaceAll(destination: ListoDestination) {
-        navigator.replaceAll(destination)
-    }
-
-    fun navigateBack(): Boolean = navigator.navigateBack()
-}
+    val navigationState: ListoNavigationState,
+)
 
 @Composable
-fun rememberListoAppState(
-    startDestination: ListoDestination = ListoDestination.Splash,
-): ListoAppState {
-    val backStack = rememberNavBackStack(startDestination)
-    val navigator = remember(backStack) {
-        ListoNavigatorImpl(backStack)
-    }
+fun rememberListoAppState(): ListoAppState {
+    val navigationState = rememberListoNavigationState(SplashKey)
 
-    return remember(backStack, navigator) {
+    return remember(navigationState) {
         ListoAppState(
-            backStack = backStack,
-            navigator = navigator,
+            navigationState = navigationState
         )
     }
 }

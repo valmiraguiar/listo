@@ -1,9 +1,11 @@
 package com.valmiraguiar.listo.feature.lists.presentation.create
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,10 +18,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -30,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -186,23 +193,68 @@ private fun CreateListTopBar(
     Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        IconButton(
-            onClick = dropUnlessResumed {
-                onBack()
-            },
-            modifier = Modifier.align(Alignment.CenterStart),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(id = R.string.action_back),
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+//                IconButton(
+//                    onClick = dropUnlessResumed {
+//                        onBack()
+//                    },
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+//                        contentDescription = stringResource(id = R.string.action_back),
+//                    )
+//                }
+                IconButton(
+                    onClick = dropUnlessResumed {
+                        onBack()
+                    },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = Color.Transparent,
+                    ),
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(id = R.string.action_back),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+
+                Text(
+                    text = stringResource(id = R.string.create_list_topbar_title),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
+
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(
+                    onClick = dropUnlessResumed {
+                        onBack()
+                    },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = Color.Transparent,
+                    ),
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(id = R.string.action_back),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+
+                Text(text = "Concluir")
+            }
+
         }
-        Text(
-            text = stringResource(id = R.string.create_list_topbar_title),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.align(Alignment.Center),
-        )
     }
 }
 

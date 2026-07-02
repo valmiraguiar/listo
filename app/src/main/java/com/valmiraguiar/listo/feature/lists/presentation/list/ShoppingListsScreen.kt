@@ -40,7 +40,7 @@ fun ShoppingListsRoute(
     onShoppingListClick: (Long) -> Unit,
     onCreateListClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ShoppingListsViewModel = hiltViewModel(),
+    viewModel: ShoppingListsViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

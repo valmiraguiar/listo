@@ -2,35 +2,32 @@ package com.valmiraguiar.listo.core.navigation
 
 import androidx.navigation3.runtime.NavKey
 
-interface ListoNavigator {
-    val canNavigateBack: Boolean
+class ListoNavigator(
+    val state: ListoNavigationState
+) {
 
-    fun navigateTo(destination: ListoDestination)
-
-    fun replaceAll(destination: ListoDestination)
-
-    fun navigateBack(): Boolean
-}
-
-class ListoNavigatorImpl(
-    private val backStack: MutableList<NavKey>,
-) : ListoNavigator {
-
-    override val canNavigateBack: Boolean
-        get() = backStack.size > 1
-
-    override fun navigateTo(destination: ListoDestination) {
-        backStack.add(destination)
+    /**
+     * Navigate to a navigation key
+     *
+     * @param route = the navigation key to navigate to
+     */
+    fun navigate(
+        route: NavKey
+    ) {
+        goToRoute(route)
     }
 
-    override fun replaceAll(destination: ListoDestination) {
-        backStack.clear()
-        backStack.add(destination)
+    fun navigateBack() {
+        when(state.currentKey) {
+            state.startRoute -> error("You cannot go back from the start route")
+            else -> state.stack.removeLastOrNull()
+        }
     }
 
-    override fun navigateBack(): Boolean {
-        if (!canNavigateBack) return false
-        backStack.removeLast()
-        return true
+    private fun goToRoute(route: NavKey) {
+        state.stack.apply {
+            remove(route)
+            add(route)
+        }
     }
 }
