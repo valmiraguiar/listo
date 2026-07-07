@@ -47,7 +47,7 @@ import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.UnderlinedTextField
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
-import com.valmiraguiar.listo.ui.theme.ListoTheme
+import com.valmiraguiar.listo.feature.common.components.theme.ListoTheme
 
 @Composable
 fun CreateProductScreen(

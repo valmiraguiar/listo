@@ -1,4 +1,4 @@
-package com.valmiraguiar.listo.ui.theme
+package com.valmiraguiar.listo.feature.common.components.theme
 
 import androidx.compose.ui.graphics.Color
 

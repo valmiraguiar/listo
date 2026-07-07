@@ -25,7 +25,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.valmiraguiar.listo.R
-import com.valmiraguiar.listo.ui.theme.ListoTheme
+import com.valmiraguiar.listo.feature.common.components.theme.ListoTheme
 import kotlinx.coroutines.delay
 
 @Composable

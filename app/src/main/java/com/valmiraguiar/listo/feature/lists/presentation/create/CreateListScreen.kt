@@ -18,9 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -49,7 +46,7 @@ import com.valmiraguiar.listo.feature.common.components.UnderlinedTextField
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.product.presentation.createproduct.DraftListItemUiState
-import com.valmiraguiar.listo.ui.theme.ListoTheme
+import com.valmiraguiar.listo.feature.common.components.theme.ListoTheme
 
 @Composable
 fun CreateListRoute(

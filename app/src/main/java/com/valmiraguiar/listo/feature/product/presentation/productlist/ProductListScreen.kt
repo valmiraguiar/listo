@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
-import com.valmiraguiar.listo.ui.theme.ListoTheme
+import com.valmiraguiar.listo.feature.common.components.theme.ListoTheme
 
 @Composable
 fun ProductListRoute() {

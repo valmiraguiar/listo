@@ -15,7 +15,6 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.valmiraguiar.listo.core.navigation.ListoAppState
 import com.valmiraguiar.listo.core.navigation.ListoNavigator
 import com.valmiraguiar.listo.feature.common.components.ListoTopBar
 import com.valmiraguiar.listo.feature.lists.navigation.listsEntry
