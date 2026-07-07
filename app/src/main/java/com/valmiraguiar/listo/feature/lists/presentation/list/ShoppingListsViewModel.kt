@@ -1,42 +1,65 @@
 package com.valmiraguiar.listo.feature.lists.presentation.list
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListsUseCase
+import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
+import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction
+import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class ShoppingListsViewModel @Inject constructor(
-    observeShoppingListsUseCase: ObserveShoppingListsUseCase,
+    private val observeShoppingListsUseCase: ObserveShoppingListsUseCase,
 ) : ViewModel() {
 
-    val uiState: StateFlow<ShoppingListsUiState> = observeShoppingListsUseCase()
-        .map { shoppingLists ->
-            ShoppingListsUiState(
+    private val _uiState: MutableStateFlow<ShoppingListsUiState> by lazy {
+        MutableStateFlow(
+            ShoppingListsUiState()
+        )
+    }
+    val uiState: StateFlow<ShoppingListsUiState> get() = _uiState
+
+    private val _uiResult: MutableSharedFlow<ShoppingListUiResult> =
+        MutableSharedFlow()
+    val uiResult: SharedFlow<ShoppingListUiResult> get() = _uiResult
+
+    fun dispatch(action: ShoppingListsUiAction) {
+        when (action) {
+            is ShoppingListsUiAction.FetchLists -> fetchShoppingLists()
+            is ShoppingListsUiAction.BackClick -> TODO()
+            is ShoppingListsUiAction.ListCardClick -> TODO()
+            is ShoppingListsUiAction.NewListClick -> TODO()
+        }
+    }
+
+    private fun fetchShoppingLists() {
+//        observeShoppingListsUseCase().onStart {
+//            updateUiState { copy(isLoading = true) }
+//        }.onCompletion {
+//            updateUiState { copy(isLoading = false) }
+//        }.onSuccess { resume ->
+//            handleFetchShoppingListsSuccess(resume)
+//        }.onError {  }
+        handleFetchShoppingListsSuccess(MOCK) // TODO - add usecase call
+    }
+
+    private fun handleFetchShoppingListsSuccess(resume: List<ShoppingListSummary>) {
+        updateUiState {
+            copy(
                 isLoading = false,
-                shoppingLists = MOCK.map { shoppingList -> // TODO - Remove mock when database is configured
-                    shoppingList.toUiItem()
-                },
+                shoppingLists = resume
             )
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
-            initialValue = ShoppingListsUiState(),
-        )
+    }
 
-    private fun ShoppingListSummary.toUiItem(): ShoppingListUiItem {
-        return ShoppingListUiItem(
-            id = id,
-            title = title,
-            createdAt = createdAt,
-        )
+    private fun updateUiState(reduce: ShoppingListsUiState.() -> ShoppingListsUiState) {
+        _uiState.value = uiState.value.reduce()
     }
 
     private companion object {

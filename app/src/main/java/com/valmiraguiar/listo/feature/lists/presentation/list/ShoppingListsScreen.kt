@@ -31,6 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.theme.ListoTheme
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
+import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiState
 import java.text.DateFormat
 import java.util.Date
 
@@ -79,6 +81,8 @@ fun ShoppingListsScreen(
 //        },
 //    ) { contentPadding ->
 // TODO - Add the FAB again
+
+
     ShoppingListsContent(
         uiState = uiState,
         onShoppingListClick = onShoppingListClick,
@@ -141,7 +145,7 @@ private fun ShoppingListsContent(
 
 @Composable
 private fun ShoppingListCard(
-    shoppingList: ShoppingListUiItem,
+    shoppingList: ShoppingListSummary,
     onClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -201,17 +205,17 @@ private fun ShoppingListsScreenPreview() {
             uiState = ShoppingListsUiState(
                 isLoading = false,
                 shoppingLists = listOf(
-                    ShoppingListUiItem(
+                    ShoppingListSummary(
                         id = 1L,
                         title = "Compras da semana",
                         createdAt = 1_784_324_400_000L,
                     ),
-                    ShoppingListUiItem(
+                    ShoppingListSummary(
                         id = 2L,
                         title = "Churrasco de domingo",
                         createdAt = 1_784_238_000_000L,
                     ),
-                    ShoppingListUiItem(
+                    ShoppingListSummary(
                         id = 3L,
                         title = "Churrasco de domingo",
                         createdAt = 1_784_238_000_000L,
