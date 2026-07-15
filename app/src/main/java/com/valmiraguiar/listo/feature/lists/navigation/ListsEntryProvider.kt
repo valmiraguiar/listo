@@ -11,7 +11,7 @@ fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
     entry<ShoppingListsKey> {
         ShoppingListsRoute(
             onShoppingListClickNavigate = navigator::navigateToListDetails,
-            onCreateListClickNavigate = {},// TODO - Implement navigation
+            onCreateListClickNavigate = {}, // TODO - Implement navigation
             viewModel = hiltViewModel()
         )
     }

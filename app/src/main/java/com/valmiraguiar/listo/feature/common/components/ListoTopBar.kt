@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.valmiraguiar.listo.R
-import com.valmiraguiar.listo.feature.common.components.theme.ListoTheme
+import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 
 @Composable
 fun ListoTopBar(

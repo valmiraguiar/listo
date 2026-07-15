@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.LaunchOnce
-import com.valmiraguiar.listo.feature.common.components.theme.ListoTheme
+import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction
@@ -136,7 +136,7 @@ private fun ShoppingListsContent(
             ShoppingListCard(
                 shoppingList = shoppingList,
                 onClick = {
-                    println("LISTCLICK -> ${shoppingList}")
+                    println("LISTCLICK -> $shoppingList")
                     onUiEvent.invoke(
                         ShoppingListsUiAction.ItemListClick(
                             shoppingList.id

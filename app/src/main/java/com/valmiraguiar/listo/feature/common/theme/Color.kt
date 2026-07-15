@@ -1,4 +1,6 @@
-package com.valmiraguiar.listo.feature.common.components.theme
+@file:Suppress("MagicNumber")
+
+package com.valmiraguiar.listo.feature.common.theme
 
 import androidx.compose.ui.graphics.Color
 

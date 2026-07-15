@@ -18,7 +18,7 @@ class ListoNavigator(
     }
 
     fun navigateBack() {
-        when(state.currentKey) {
+        when (state.currentKey) {
             state.startRoute -> error("You cannot go back from the start route")
             else -> state.stack.removeLastOrNull()
         }

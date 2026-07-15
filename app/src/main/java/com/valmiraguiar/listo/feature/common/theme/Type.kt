@@ -1,4 +1,4 @@
-package com.valmiraguiar.listo.feature.common.components.theme
+package com.valmiraguiar.listo.feature.common.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
