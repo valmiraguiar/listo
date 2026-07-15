@@ -1,6 +1,7 @@
 package com.valmiraguiar.listo.feature.lists.presentation.list
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListsUseCase
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,12 +32,23 @@ class ShoppingListsViewModel @Inject constructor(
         MutableSharedFlow()
     val uiResult: SharedFlow<ShoppingListUiResult> get() = _uiResult
 
+    private fun emitUiResult(uiResult: ShoppingListUiResult) = viewModelScope.launch {
+        _uiResult.emit(uiResult)
+    }
+
     fun dispatch(action: ShoppingListsUiAction) {
         when (action) {
             is ShoppingListsUiAction.FetchLists -> fetchShoppingLists()
-            is ShoppingListsUiAction.BackClick -> TODO()
-            is ShoppingListsUiAction.ListCardClick -> TODO()
-            is ShoppingListsUiAction.NewListClick -> TODO()
+
+            is ShoppingListsUiAction.BackClick -> emitUiResult(ShoppingListUiResult.OnNavigateBack)
+
+            is ShoppingListsUiAction.ItemListClick -> emitUiResult(
+                ShoppingListUiResult.OnDetailListNavigate(
+                    action.cardId
+                )
+            )
+
+            is ShoppingListsUiAction.NewListClick -> emitUiResult(ShoppingListUiResult.OnCreateListNavigate)
         }
     }
 
@@ -50,11 +64,13 @@ class ShoppingListsViewModel @Inject constructor(
     }
 
     private fun handleFetchShoppingListsSuccess(resume: List<ShoppingListSummary>) {
-        updateUiState {
-            copy(
-                isLoading = false,
-                shoppingLists = resume
-            )
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    shoppingLists = resume
+                )
+            }
         }
     }
 

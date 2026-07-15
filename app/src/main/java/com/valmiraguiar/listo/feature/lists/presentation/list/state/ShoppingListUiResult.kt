@@ -5,4 +5,7 @@ sealed interface ShoppingListUiResult {
     data object OnShowLists : ShoppingListUiResult
     data object OnShowEmptyLists : ShoppingListUiResult
     data object OnError : ShoppingListUiResult
+    data object OnCreateListNavigate : ShoppingListUiResult
+    data class OnDetailListNavigate(val listId: Long) : ShoppingListUiResult
+    data object OnNavigateBack : ShoppingListUiResult
 }

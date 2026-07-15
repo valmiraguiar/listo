@@ -10,8 +10,8 @@ import com.valmiraguiar.listo.feature.lists.presentation.list.ShoppingListsRoute
 fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
     entry<ShoppingListsKey> {
         ShoppingListsRoute(
-            onShoppingListClick = navigator::navigateToListDetails,
-            onCreateListClick = {},// TODO - Implement navigation
+            onShoppingListClickNavigate = navigator::navigateToListDetails,
+            onCreateListClickNavigate = {},// TODO - Implement navigation
             viewModel = hiltViewModel()
         )
     }
