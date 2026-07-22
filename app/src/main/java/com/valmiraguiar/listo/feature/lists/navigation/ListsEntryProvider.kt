@@ -17,8 +17,6 @@ fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
     }
 
     entry<ListDetailsKey> {
-        ShoppingListDetailsRoute(
-            onBack = navigator::navigateBack
-        )
+        ShoppingListDetailsRoute()
     }
 }

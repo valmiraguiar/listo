@@ -8,16 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
@@ -34,18 +31,15 @@ import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 
 @Composable
 fun ShoppingListDetailsRoute(
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ShoppingListDetailsScreen(
-        onBack = onBack,
         modifier = modifier,
     )
 }
 
 @Composable
 fun ShoppingListDetailsScreen(
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val shoppingItems = remember {
@@ -56,7 +50,6 @@ fun ShoppingListDetailsScreen(
 
     ShoppingListDetailsContent(
         shoppingItems = shoppingItems,
-        onBack = onBack,
         onCheckedChange = { item, isChecked ->
             shoppingItems.remove(item)
             val updatedItem = item.copy(isChecked = isChecked)
@@ -74,19 +67,10 @@ fun ShoppingListDetailsScreen(
 @Composable
 private fun ShoppingListDetailsContent(
     shoppingItems: List<ShoppingListDetailsItem>,
-    onBack: () -> Unit,
     onCheckedChange: (ShoppingListDetailsItem, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        IconButton(onClick = onBack) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back arrow",
-                modifier = Modifier.size(24.dp),
-            )
-        }
-
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -226,7 +210,6 @@ private fun ShoppingListDetailsScreenPreview() {
     ListoTheme(darkTheme = false) {
         ShoppingListDetailsContent(
             shoppingItems = PREVIEW_ITEMS,
-            onBack = {},
             onCheckedChange = { _, _ -> },
         )
     }

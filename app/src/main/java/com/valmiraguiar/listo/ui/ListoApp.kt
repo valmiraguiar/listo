@@ -17,6 +17,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.valmiraguiar.listo.core.navigation.ListoNavigator
 import com.valmiraguiar.listo.feature.common.components.ListoTopBar
+import com.valmiraguiar.listo.feature.lists.navigation.ShoppingListsKey
 import com.valmiraguiar.listo.feature.lists.navigation.listsEntry
 import com.valmiraguiar.listo.feature.splash.navigation.splashEntry
 
@@ -33,7 +34,11 @@ fun ListoApp(
             .background(MaterialTheme.colorScheme.background)
             .safeDrawingPadding(),
         topBar = {
-            ListoTopBar()
+            ListoTopBar(
+                showBackButton = appState.navigationState.currentKey != ShoppingListsKey &&
+                    appState.navigationState.currentKey != appState.navigationState.startRoute,
+                onBackClick = navigator::navigateBack
+            )
         }
     ) { contentPadding ->
         val entryProvider = entryProvider {
