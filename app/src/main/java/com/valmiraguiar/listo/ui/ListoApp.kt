@@ -49,7 +49,6 @@ fun ListoApp(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
                 .consumeWindowInsets(contentPadding)
         ) {
             NavDisplay(
