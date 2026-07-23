@@ -2,17 +2,21 @@ package com.valmiraguiar.listo.feature.lists.presentation.details
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -24,22 +28,28 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
+import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 
 @Composable
 fun ShoppingListDetailsRoute(
+    onEditListClickNavigate: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ShoppingListDetailsScreen(
+        onEditListClick = onEditListClickNavigate,
         modifier = modifier,
     )
 }
 
 @Composable
 fun ShoppingListDetailsScreen(
+    onEditListClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val shoppingItems = remember {
@@ -50,6 +60,7 @@ fun ShoppingListDetailsScreen(
 
     ShoppingListDetailsContent(
         shoppingItems = shoppingItems,
+        onEditListClick = onEditListClick,
         onCheckedChange = { item, isChecked ->
             shoppingItems.remove(item)
             val updatedItem = item.copy(isChecked = isChecked)
@@ -68,12 +79,18 @@ fun ShoppingListDetailsScreen(
 private fun ShoppingListDetailsContent(
     shoppingItems: List<ShoppingListDetailsItem>,
     onCheckedChange: (ShoppingListDetailsItem, Boolean) -> Unit,
+    onEditListClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            contentPadding = PaddingValues(
+                start = 16.dp,
+                top = 12.dp,
+                end = 16.dp,
+                bottom = 96.dp,
+            ),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(
@@ -101,6 +118,23 @@ private fun ShoppingListDetailsContent(
                 }
             }
         }
+
+        ExtendedFloatingActionButton(
+            onClick = dropUnlessResumed(block = onEditListClick),
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = null,
+                )
+            },
+            text = {
+                Text(text = stringResource(id = R.string.shopping_list_details_edit))
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
+                .padding(16.dp),
+        )
     }
 }
 
@@ -211,6 +245,7 @@ private fun ShoppingListDetailsScreenPreview() {
         ShoppingListDetailsContent(
             shoppingItems = PREVIEW_ITEMS,
             onCheckedChange = { _, _ -> },
+            onEditListClick = {},
         )
     }
 }
