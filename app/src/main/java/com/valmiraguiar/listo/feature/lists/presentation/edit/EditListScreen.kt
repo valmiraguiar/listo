@@ -1,5 +1,8 @@
 package com.valmiraguiar.listo.feature.lists.presentation.edit
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,12 +10,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Save
@@ -29,9 +33,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,6 +56,7 @@ import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiSt
 import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 
 private const val DIVIDER_ALPHA = 0.35f
+private const val SCROLL_ANIMATION_DURATION_MILLIS = 450
 
 @Composable
 fun EditListRoute(
@@ -82,6 +89,16 @@ fun EditListScreen(
     onUiEvent: (EditListUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberLazyListState()
+    var previousItemCount by remember { mutableIntStateOf(uiState.items.size) }
+
+    LaunchedEffect(uiState.items.size) {
+        if (uiState.items.size > previousItemCount && uiState.items.isNotEmpty()) {
+            listState.animateScrollToLastItem()
+        }
+        previousItemCount = uiState.items.size
+    }
+
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -105,6 +122,7 @@ fun EditListScreen(
                 EditListContent(
                     uiState = uiState,
                     onUiEvent = onUiEvent,
+                    listState = listState,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -127,9 +145,11 @@ fun EditListScreen(
 private fun EditListContent(
     uiState: EditListUiState,
     onUiEvent: (EditListUiAction) -> Unit,
+    listState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
+        state = listState,
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(
             start = 16.dp,
@@ -196,6 +216,33 @@ private fun EditListItem(
             selected = item.categoryEnum,
             onCategorySelected = onCategorySelected,
             modifier = Modifier.widthIn(min = 128.dp, max = 180.dp),
+        )
+    }
+}
+
+private suspend fun LazyListState.animateScrollToLastItem() {
+    withFrameNanos { }
+
+    val lastItemIndex = layoutInfo.totalItemsCount - 1
+    if (lastItemIndex < 0) return
+
+    val lastVisibleItem = layoutInfo.visibleItemsInfo.firstOrNull { item ->
+        item.index == lastItemIndex
+    }
+
+    val usableViewportEnd = layoutInfo.viewportEndOffset - layoutInfo.afterContentPadding
+    val scrollDistance = lastVisibleItem?.let { item ->
+        item.offset + item.size - usableViewportEnd
+    }
+
+    when {
+        scrollDistance == null -> animateScrollToItem(lastItemIndex)
+        scrollDistance > 0 -> animateScrollBy(
+            value = scrollDistance.toFloat(),
+            animationSpec = tween(
+                durationMillis = SCROLL_ANIMATION_DURATION_MILLIS,
+                easing = FastOutSlowInEasing,
+            ),
         )
     }
 }
