@@ -59,6 +59,7 @@ import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiSt
 import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 
 private const val DIVIDER_ALPHA = 0.35f
+private const val ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS = 300
 private const val SCROLL_ANIMATION_DURATION_MILLIS = 450
 
 @Composable
@@ -167,34 +168,42 @@ private fun EditListContent(
             key = { item -> item.id },
             contentType = { "edit_list_item" },
         ) { item ->
-            EditListItem(
-                item = item,
-                onDescriptionChange = { description ->
-                    onUiEvent(
-                        EditListUiAction.ItemDescriptionChange(
-                            itemId = item.id,
-                            description = description,
-                        ),
-                    )
-                },
-                onCategorySelected = { category ->
-                    onUiEvent(
-                        EditListUiAction.ItemCategoryChange(
-                            itemId = item.id,
-                            categoryEnum = category,
-                        ),
-                    )
-                },
-                onRemoveItem = {
-                    onUiEvent(EditListUiAction.RemoveItemClick(itemId = item.id))
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            if (item != uiState.items.last()) {
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = DIVIDER_ALPHA),
+            Column(
+                modifier = Modifier.animateItem(
+                    placementSpec = tween(
+                        durationMillis = ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS,
+                    ),
+                ),
+            ) {
+                EditListItem(
+                    item = item,
+                    onDescriptionChange = { description ->
+                        onUiEvent(
+                            EditListUiAction.ItemDescriptionChange(
+                                itemId = item.id,
+                                description = description,
+                            ),
+                        )
+                    },
+                    onCategorySelected = { category ->
+                        onUiEvent(
+                            EditListUiAction.ItemCategoryChange(
+                                itemId = item.id,
+                                categoryEnum = category,
+                            ),
+                        )
+                    },
+                    onRemoveItem = {
+                        onUiEvent(EditListUiAction.RemoveItemClick(itemId = item.id))
+                    },
+                    modifier = Modifier.fillMaxWidth(),
                 )
+
+                if (item != uiState.items.last()) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = DIVIDER_ALPHA),
+                    )
+                }
             }
         }
     }
