@@ -14,4 +14,7 @@ sealed interface EditListUiAction {
         val itemId: Long,
         val categoryEnum: CategoryEnum,
     ) : EditListUiAction
+    data class RemoveItemClick(
+        val itemId: Long,
+    ) : EditListUiAction
 }

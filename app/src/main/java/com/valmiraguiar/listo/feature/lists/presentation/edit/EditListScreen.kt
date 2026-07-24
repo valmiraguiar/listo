@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +30,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -182,6 +185,9 @@ private fun EditListContent(
                         ),
                     )
                 },
+                onRemoveItem = {
+                    onUiEvent(EditListUiAction.RemoveItemClick(itemId = item.id))
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -199,18 +205,36 @@ private fun EditListItem(
     item: EditListItemUiState,
     onDescriptionChange: (String) -> Unit,
     onCategorySelected: (CategoryEnum) -> Unit,
+    onRemoveItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(start = 18.dp, top = 16.dp, end = 18.dp, bottom = 16.dp),
+        modifier = modifier.padding(top = 16.dp, bottom = 16.dp).fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        UnderlinedTextField(
-            value = item.description,
-            onValueChange = onDescriptionChange,
-            label = stringResource(id = R.string.create_list_item_description_placeholder),
-            modifier = Modifier,
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            UnderlinedTextField(
+                value = item.description,
+                onValueChange = onDescriptionChange,
+                label = stringResource(id = R.string.create_list_item_description_placeholder),
+                modifier = Modifier.weight(1f),
+            )
+
+            IconButton(
+                onClick = dropUnlessResumed(block = onRemoveItem),
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = stringResource(id = R.string.edit_list_remove_item),
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
 
         CategoryDropdown(
             selected = item.categoryEnum,
@@ -257,7 +281,8 @@ private fun EditListFloatingActions(
     Row(
         modifier = modifier
             .navigationBarsPadding()
-            .padding(16.dp).fillMaxWidth(),
+            .padding(16.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

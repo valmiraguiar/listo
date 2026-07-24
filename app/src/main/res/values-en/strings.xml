@@ -19,6 +19,7 @@
     <string name="create_list_cta">Create list</string>
     <string name="create_list_saved_message">List created and saved locally.</string>
     <string name="edit_list_empty">No items added yet.</string>
+    <string name="edit_list_remove_item">Remove item</string>
     <string name="edit_list_save">Save</string>
     <string name="shopping_lists_title">My lists</string>
     <string name="shopping_lists_empty">No lists created yet.</string>

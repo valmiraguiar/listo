@@ -25,13 +25,13 @@ import javax.inject.Inject
 class EditListViewModel @Inject constructor(
     private val createShoppingListUseCase: CreateShoppingListUseCase,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(EditListUiState())
+    private var nextItemId = FIRST_ITEM_ID
+
+    private val _uiState = MutableStateFlow(initialUiState())
     val uiState: StateFlow<EditListUiState> = _uiState.asStateFlow()
 
     private val _uiResult = MutableSharedFlow<EditListUiResult>()
     val uiResult: SharedFlow<EditListUiResult> get() = _uiResult
-
-    private var nextItemId = FIRST_ITEM_ID
 
     fun dispatch(action: EditListUiAction) {
         when (action) {
@@ -43,13 +43,26 @@ class EditListViewModel @Inject constructor(
             is EditListUiAction.ItemDescriptionChange -> updateItem(action.itemId) { item ->
                 item.copy(description = action.description)
             }
+            is EditListUiAction.RemoveItemClick -> removeItem(action.itemId)
             is EditListUiAction.SaveListClick -> saveList()
         }
     }
 
+    private fun initialUiState(): EditListUiState = EditListUiState(
+        items = listOf(newItem()),
+    )
+
     private fun addItem() {
         _uiState.update { current ->
             current.copy(items = current.items + newItem())
+        }
+    }
+
+    private fun removeItem(itemId: Long) {
+        _uiState.update { current ->
+            current.copy(
+                items = current.items.filterNot { item -> item.id == itemId },
+            )
         }
     }
 
@@ -77,7 +90,7 @@ class EditListViewModel @Inject constructor(
                 createShoppingListUseCase(currentState.toDraft())
             }.onSuccess { listId ->
                 _uiResult.emit(EditListUiResult.OnListSaved(listId))
-                _uiState.update { EditListUiState() }
+                _uiState.update { initialUiState() }
             }.onFailure {
                 _uiResult.emit(EditListUiResult.OnError)
                 _uiState.update { it.copy(isSaving = false) }
