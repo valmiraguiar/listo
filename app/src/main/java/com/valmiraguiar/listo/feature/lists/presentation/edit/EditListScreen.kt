@@ -322,16 +322,6 @@ private fun EditListFloatingActions(
             text = {
                 Text(text = stringResource(id = R.string.edit_list_save))
             },
-            containerColor = if (canSave) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surfaceVariant
-            },
-            contentColor = if (canSave) {
-                MaterialTheme.colorScheme.onPrimaryContainer
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            },
             modifier = Modifier.weight(1f)
         )
     }
