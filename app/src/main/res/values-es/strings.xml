@@ -23,7 +23,7 @@
     <string name="edit_list_save">Guardar</string>
     <string name="shopping_lists_title">Mis listas</string>
     <string name="shopping_lists_empty">Aún no se creó ninguna lista.</string>
-    <string name="shopping_lists_create">Crear lista</string>
+    <string name="shopping_lists_create">Crear nueva lista</string>
     <string name="shopping_list_details_title">Detalles de la lista</string>
     <string name="shopping_list_details_edit">Editar</string>
     <string name="category_beverages">Bebidas</string>

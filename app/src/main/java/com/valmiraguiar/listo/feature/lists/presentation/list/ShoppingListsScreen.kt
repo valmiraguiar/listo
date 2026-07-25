@@ -8,13 +8,15 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.LaunchOnce
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
@@ -72,7 +75,6 @@ fun ShoppingListsRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListsScreen(
     uiState: ShoppingListsUiState,
@@ -83,35 +85,59 @@ fun ShoppingListsScreen(
         onUiEvent(ShoppingListsUiAction.FetchLists)
     }
 
-    when {
-        uiState.isLoading -> {
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator()
+    Box(modifier = modifier.fillMaxSize()) {
+        when {
+            uiState.isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
 
-        uiState.shoppingLists.isEmpty() -> {
-            Box(
-                modifier = modifier.padding(horizontal = 24.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.shopping_lists_empty),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+            uiState.shoppingLists.isEmpty() -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.shopping_lists_empty),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            else -> {
+                ShoppingListsContent(
+                    uiState = uiState,
+                    onUiEvent = onUiEvent,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }
 
-        else -> {
-            ShoppingListsContent(
-                uiState = uiState,
-                onUiEvent = onUiEvent,
+        if (!uiState.isLoading) {
+            ExtendedFloatingActionButton(
+                onClick = dropUnlessResumed {
+                    onUiEvent(ShoppingListsUiAction.NewListClick)
+                },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = null,
+                    )
+                },
+                text = {
+                    Text(text = stringResource(id = R.string.shopping_lists_create))
+                },
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .align(Alignment.BottomEnd)
+                    .navigationBarsPadding()
+                    .padding(16.dp),
             )
         }
     }
@@ -125,7 +151,12 @@ private fun ShoppingListsContent(
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            top = 12.dp,
+            end = 16.dp,
+            bottom = 96.dp,
+        ),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(
@@ -169,7 +200,7 @@ private fun ShoppingListCard(
     }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(end = 8.dp)
             .clickable(
