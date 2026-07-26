@@ -44,6 +44,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -96,9 +98,11 @@ fun EditListScreen(
 ) {
     val listState = rememberLazyListState()
     var previousItemCount by remember { mutableIntStateOf(uiState.items.size) }
+    var focusedItemId by remember { mutableStateOf<Long?>(null) }
 
     LaunchedEffect(uiState.items.size) {
         if (uiState.items.size > previousItemCount && uiState.items.isNotEmpty()) {
+            focusedItemId = uiState.items.last().id
             listState.animateScrollToLastItem()
         }
         previousItemCount = uiState.items.size
@@ -130,6 +134,8 @@ fun EditListScreen(
                     uiState = uiState,
                     onUiEvent = onUiEvent,
                     listState = listState,
+                    focusedItemId = focusedItemId,
+                    onItemFocused = { focusedItemId = null },
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -153,6 +159,8 @@ private fun EditListContent(
     uiState: EditListUiState,
     onUiEvent: (EditListUiAction) -> Unit,
     listState: LazyListState,
+    focusedItemId: Long?,
+    onItemFocused: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -180,6 +188,7 @@ private fun EditListContent(
             ) {
                 EditListItem(
                     item = item,
+                    requestDescriptionFocus = item.id == focusedItemId,
                     onDescriptionChange = { description ->
                         onUiEvent(
                             EditListUiAction.ItemDescriptionChange(
@@ -199,6 +208,7 @@ private fun EditListContent(
                     onRemoveItem = {
                         onUiEvent(EditListUiAction.RemoveItemClick(itemId = item.id))
                     },
+                    onDescriptionFocused = onItemFocused,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -209,11 +219,23 @@ private fun EditListContent(
 @Composable
 private fun EditListItem(
     item: EditListItemUiState,
+    requestDescriptionFocus: Boolean,
     onDescriptionChange: (String) -> Unit,
     onCategorySelected: (CategoryEnum) -> Unit,
     onRemoveItem: () -> Unit,
+    onDescriptionFocused: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val descriptionFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(requestDescriptionFocus) {
+        if (requestDescriptionFocus) {
+            withFrameNanos { }
+            descriptionFocusRequester.requestFocus()
+            onDescriptionFocused()
+        }
+    }
+
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp, vertical = 16.dp)
@@ -229,7 +251,9 @@ private fun EditListItem(
                 value = item.description,
                 onValueChange = onDescriptionChange,
                 label = stringResource(id = R.string.create_list_item_description_placeholder),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .focusRequester(descriptionFocusRequester),
             )
 
             IconButton(
