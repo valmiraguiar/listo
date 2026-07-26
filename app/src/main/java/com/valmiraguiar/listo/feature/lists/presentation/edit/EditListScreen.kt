@@ -2,6 +2,7 @@ package com.valmiraguiar.listo.feature.lists.presentation.edit
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,10 +29,10 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,6 +52,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.UnderlinedTextField
+import com.valmiraguiar.listo.feature.common.theme.BackgroundVariant
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListItemUiState
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiAction
@@ -58,7 +60,6 @@ import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiRe
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiState
 import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 
-private const val DIVIDER_ALPHA = 0.35f
 private const val ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS = 300
 private const val SCROLL_ANIMATION_DURATION_MILLIS = 450
 
@@ -104,7 +105,9 @@ fun EditListScreen(
     }
 
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = BackgroundVariant),
     ) {
         when {
             uiState.items.isEmpty() -> {
@@ -156,24 +159,24 @@ private fun EditListContent(
         state = listState,
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(
-            start = 16.dp,
-            top = 12.dp,
-            end = 16.dp,
             bottom = 144.dp,
         ),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         items(
             items = uiState.items,
             key = { item -> item.id },
             contentType = { "edit_list_item" },
         ) { item ->
-            Column(
-                modifier = Modifier.animateItem(
-                    placementSpec = tween(
-                        durationMillis = ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS,
-                    ),
-                ),
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateItem(
+                        placementSpec = tween(
+                            durationMillis = ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS,
+                        ),
+                    )
+                    .background(color = MaterialTheme.colorScheme.surface),
             ) {
                 EditListItem(
                     item = item,
@@ -198,12 +201,6 @@ private fun EditListContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 )
-
-                if (item != uiState.items.last()) {
-                    HorizontalDivider(
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = DIVIDER_ALPHA),
-                    )
-                }
             }
         }
     }
@@ -218,7 +215,9 @@ private fun EditListItem(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(top = 16.dp, bottom = 16.dp).fillMaxWidth(),
+        modifier = modifier
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Row(
