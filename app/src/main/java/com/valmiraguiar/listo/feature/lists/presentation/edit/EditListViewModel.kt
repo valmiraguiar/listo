@@ -37,6 +37,7 @@ class EditListViewModel @Inject constructor(
         when (action) {
             is EditListUiAction.AddItemClick -> addItem()
             is EditListUiAction.BackClick -> emitUiResult(EditListUiResult.OnNavigateBack)
+            is EditListUiAction.ListNameChange -> updateListName(action.listName)
             is EditListUiAction.ItemCategoryChange -> updateItem(action.itemId) { item ->
                 item.copy(categoryEnum = action.categoryEnum)
             }
@@ -62,6 +63,16 @@ class EditListViewModel @Inject constructor(
         _uiState.update { current ->
             current.copy(
                 items = current.items.filterNot { item -> item.id == itemId },
+            )
+        }
+    }
+
+    private fun updateListName(
+        listName: String
+    ) {
+        _uiState.update { current ->
+            current.copy(
+                listName = listName
             )
         }
     }

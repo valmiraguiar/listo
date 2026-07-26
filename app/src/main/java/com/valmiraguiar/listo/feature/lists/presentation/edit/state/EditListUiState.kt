@@ -4,6 +4,7 @@ import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 
 data class EditListUiState(
     val isSaving: Boolean = false,
+    val listName: String = "",
     val items: List<EditListItemUiState> = emptyList(),
 ) {
     val canSave: Boolean

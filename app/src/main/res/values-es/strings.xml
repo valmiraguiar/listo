@@ -21,6 +21,7 @@
     <string name="edit_list_empty">Aún no se agregó ningún ítem.</string>
     <string name="edit_list_remove_item">Eliminar ítem</string>
     <string name="edit_list_save">Guardar</string>
+    <string name="edit_list_name">Nombre de la lista</string>
     <string name="shopping_lists_title">Mis listas</string>
     <string name="shopping_lists_empty">Aún no se creó ninguna lista.</string>
     <string name="shopping_lists_create">Crear nueva lista</string>

@@ -6,6 +6,9 @@ sealed interface EditListUiAction {
     data object AddItemClick : EditListUiAction
     data object SaveListClick : EditListUiAction
     data object BackClick : EditListUiAction
+    data class ListNameChange(
+        val listName: String,
+    ) : EditListUiAction
     data class ItemDescriptionChange(
         val itemId: Long,
         val description: String,

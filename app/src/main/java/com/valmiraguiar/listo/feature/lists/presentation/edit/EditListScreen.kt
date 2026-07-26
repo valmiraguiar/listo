@@ -167,10 +167,31 @@ private fun EditListContent(
         state = listState,
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(
+            top = 16.dp,
             bottom = 144.dp,
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        item(
+            key = "list_name",
+            contentType = "list_name",
+        ) {
+            UnderlinedTextField(
+                value = uiState.listName,
+                onValueChange = {
+                    onUiEvent(
+                        EditListUiAction.ListNameChange(
+                            listName = it,
+                        ),
+                    )
+                },
+                label = stringResource(R.string.edit_list_name),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
+
         items(
             items = uiState.items,
             key = { item -> item.id },
@@ -361,7 +382,7 @@ private fun CategoryDropdown(
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = it },
+        onExpandedChange = {},
         modifier = modifier,
     ) {
         UnderlinedTextField(
