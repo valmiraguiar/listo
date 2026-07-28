@@ -2,6 +2,7 @@ package com.valmiraguiar.listo.feature.lists.presentation.edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraftItem
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
@@ -10,7 +11,6 @@ import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListItem
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiState
-import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

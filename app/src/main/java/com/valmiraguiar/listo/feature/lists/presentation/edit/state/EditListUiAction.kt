@@ -1,6 +1,6 @@
 package com.valmiraguiar.listo.feature.lists.presentation.edit.state
 
-import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 
 sealed interface EditListUiAction {
     data object AddItemClick : EditListUiAction

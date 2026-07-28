@@ -56,11 +56,11 @@ import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.UnderlinedTextField
 import com.valmiraguiar.listo.feature.common.theme.BackgroundVariant
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListItemUiState
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiState
-import com.valmiraguiar.listo.feature.product.domain.model.CategoryEnum
 
 private const val ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS = 300
 private const val SCROLL_ANIMATION_DURATION_MILLIS = 450
