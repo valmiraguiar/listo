@@ -41,9 +41,11 @@ class EditListViewModel @Inject constructor(
             is EditListUiAction.ItemCategoryChange -> updateItem(action.itemId) { item ->
                 item.copy(categoryEnum = action.categoryEnum)
             }
+
             is EditListUiAction.ItemDescriptionChange -> updateItem(action.itemId) { item ->
                 item.copy(description = action.description)
             }
+
             is EditListUiAction.RemoveItemClick -> removeItem(action.itemId)
             is EditListUiAction.SaveListClick -> saveList()
         }
@@ -127,8 +129,7 @@ class EditListViewModel @Inject constructor(
         val filledItems = items.filter { item -> item.description.isNotBlank() }
 
         return ShoppingListDraft(
-            title = filledItems.firstOrNull()?.description?.trim()?.take(LIST_TITLE_MAX_LENGTH)
-                ?: DEFAULT_LIST_TITLE,
+            title = listName,
             items = filledItems.map { item ->
                 ShoppingListDraftItem(
                     quantity = DEFAULT_ITEM_QUANTITY,
@@ -142,8 +143,6 @@ class EditListViewModel @Inject constructor(
 
     private companion object {
         const val FIRST_ITEM_ID = 1L
-        const val LIST_TITLE_MAX_LENGTH = 40
         const val DEFAULT_ITEM_QUANTITY = ""
-        const val DEFAULT_LIST_TITLE = "Nova lista"
     }
 }

@@ -1,6 +1,5 @@
 package com.valmiraguiar.listo.feature.lists.domain.model
 
-
 data class ShoppingListDraft(
     val title: String,
     val items: List<ShoppingListDraftItem>,

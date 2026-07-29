@@ -1,7 +1,10 @@
 package com.valmiraguiar.listo.feature.lists.presentation.list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.valmiraguiar.listo.feature.common.extensions.onError
+import com.valmiraguiar.listo.feature.common.extensions.onSuccess
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListsUseCase
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
@@ -12,6 +15,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,14 +59,19 @@ class ShoppingListsViewModel @Inject constructor(
     }
 
     private fun fetchShoppingLists() {
-//        observeShoppingListsUseCase().onStart {
-//            updateUiState { copy(isLoading = true) }
-//        }.onCompletion {
-//            updateUiState { copy(isLoading = false) }
-//        }.onSuccess { resume ->
-//            handleFetchShoppingListsSuccess(resume)
-//        }.onError {  }
-        handleFetchShoppingListsSuccess(MOCK) // TODO - add usecase call
+        observeShoppingListsUseCase().onStart {
+            updateUiState { copy(isLoading = true) }
+        }.onCompletion {
+            updateUiState { copy(isLoading = false) }
+        }.onSuccess { resume ->
+            handleFetchShoppingListsSuccess(resume)
+        }.onError { error ->
+            handleError(error)
+        }.launchIn(viewModelScope)
+    }
+
+    fun handleError(error: Throwable) {
+        Log.e("app-error-log", error.toString()) // TODO - fix error log
     }
 
     private fun handleFetchShoppingListsSuccess(resume: List<ShoppingListSummary>) {

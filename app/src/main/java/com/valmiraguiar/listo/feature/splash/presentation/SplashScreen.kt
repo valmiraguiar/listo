@@ -28,6 +28,8 @@ import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 import kotlinx.coroutines.delay
 
+private const val SPLASH_TIME_IN_MILLIS = 3000L
+
 @Composable
 fun SplashScreen(
     onContinue: () -> Unit,
@@ -38,7 +40,7 @@ fun SplashScreen(
     )
 
     LaunchedEffect(Unit) {
-        delay(3000)
+        delay(SPLASH_TIME_IN_MILLIS)
         onContinue()
     }
 
