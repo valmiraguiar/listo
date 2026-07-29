@@ -46,6 +46,10 @@ class EditListViewModel @Inject constructor(
                 item.copy(description = action.description)
             }
 
+            is EditListUiAction.ItemQuantityChange -> updateItem(action.itemId) { item ->
+                item.copy(quantity = action.quantity)
+            }
+
             is EditListUiAction.RemoveItemClick -> removeItem(action.itemId)
             is EditListUiAction.SaveListClick -> saveList()
         }
@@ -121,6 +125,7 @@ class EditListViewModel @Inject constructor(
         return EditListItemUiState(
             id = id,
             description = "",
+            quantity = "",
             categoryEnum = CategoryEnum.Grocery,
         )
     }
@@ -132,7 +137,7 @@ class EditListViewModel @Inject constructor(
             title = listName,
             items = filledItems.map { item ->
                 ShoppingListDraftItem(
-                    quantity = DEFAULT_ITEM_QUANTITY,
+                    quantity = item.quantity.trim(),
                     unit = UnitEnum.Unit,
                     description = item.description.trim(),
                     categoryEnum = item.categoryEnum,
@@ -143,6 +148,5 @@ class EditListViewModel @Inject constructor(
 
     private companion object {
         const val FIRST_ITEM_ID = 1L
-        const val DEFAULT_ITEM_QUANTITY = ""
     }
 }

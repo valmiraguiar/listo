@@ -167,7 +167,6 @@ private fun ShoppingListsContent(
             ShoppingListCard(
                 shoppingList = shoppingList,
                 onClick = {
-                    println("LISTCLICK -> $shoppingList")
                     onUiEvent.invoke(
                         ShoppingListsUiAction.ItemListClick(
                             shoppingList.id

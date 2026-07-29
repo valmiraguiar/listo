@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -47,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -218,6 +220,14 @@ private fun EditListContent(
                             ),
                         )
                     },
+                    onQuantityChange = { quantity ->
+                        onUiEvent(
+                            EditListUiAction.ItemQuantityChange(
+                                itemId = item.id,
+                                quantity = quantity,
+                            ),
+                        )
+                    },
                     onCategorySelected = { category ->
                         onUiEvent(
                             EditListUiAction.ItemCategoryChange(
@@ -242,6 +252,7 @@ private fun EditListItem(
     item: EditListItemUiState,
     requestDescriptionFocus: Boolean,
     onDescriptionChange: (String) -> Unit,
+    onQuantityChange: (String) -> Unit,
     onCategorySelected: (CategoryEnum) -> Unit,
     onRemoveItem: () -> Unit,
     onDescriptionFocused: () -> Unit,
@@ -289,11 +300,27 @@ private fun EditListItem(
             }
         }
 
-        CategoryDropdown(
-            selected = item.categoryEnum,
-            onCategorySelected = onCategorySelected,
-            modifier = Modifier.widthIn(min = 128.dp, max = 180.dp),
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            UnderlinedTextField(
+                value = item.quantity,
+                onValueChange = onQuantityChange,
+                label = stringResource(id = R.string.create_list_quantity_placeholder),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.weight(1f),
+            )
+
+            CategoryDropdown(
+                selected = item.categoryEnum,
+                onCategorySelected = onCategorySelected,
+                modifier = Modifier
+                    .weight(1f)
+                    .widthIn(min = 128.dp),
+            )
+        }
     }
 }
 
@@ -382,7 +409,7 @@ private fun CategoryDropdown(
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = {},
+        onExpandedChange = { expanded = it },
         modifier = modifier,
     ) {
         UnderlinedTextField(
@@ -430,11 +457,13 @@ private fun EditListScreenPreview() {
                     EditListItemUiState(
                         id = 1L,
                         description = "Arroz",
+                        quantity = "2",
                         categoryEnum = CategoryEnum.Grocery,
                     ),
                     EditListItemUiState(
                         id = 2L,
                         description = "Leite",
+                        quantity = "1",
                         categoryEnum = CategoryEnum.Dairy,
                     ),
                 ),

@@ -35,6 +35,15 @@ interface ShoppingListDao {
     )
     fun observeShoppingLists(): Flow<List<ShoppingListEntity>>
 
+    @Query(
+        """
+        SELECT *
+        FROM shopping_lists
+        WHERE list_id = :listId
+        """,
+    )
+    fun observeShoppingListById(listId: Long): Flow<ShoppingListEntity?>
+
     @Transaction
     suspend fun insertShoppingListWithItems(
         list: ShoppingListEntity,
@@ -58,12 +67,15 @@ interface ShoppingListDao {
         SELECT
             p.product_id as product_id,
             p.product_name as product_name,
+            p.quantity as quantity,
+            p.unit as unit,
             c.category_id as category_id,
             c.category_name as category_name
         FROM shopping_list_product ref
         JOIN products p ON p.product_id = ref.product_id
         JOIN category c ON c.category_id = p.category_id
         WHERE ref.list_id = :listId
+        ORDER BY p.product_id ASC
         """
     )
     suspend fun getProductsWithCategoryByList(
@@ -75,12 +87,15 @@ interface ShoppingListDao {
         SELECT
             p.product_id as product_id,
             p.product_name as product_name,
+            p.quantity as quantity,
+            p.unit as unit,
             c.category_id as category_id,
             c.category_name as category_name
         FROM shopping_list_product ref
         JOIN products p ON p.product_id = ref.product_id
         JOIN category c ON c.category_id = p.category_id
         WHERE ref.list_id = :listId
+        ORDER BY p.product_id ASC
     """
     )
     fun observeProductsWithCategoryByList(

@@ -27,6 +27,8 @@
     <string name="shopping_lists_create">Crear nueva lista</string>
     <string name="shopping_list_details_title">Detalles de la lista</string>
     <string name="shopping_list_details_edit">Editar</string>
+    <string name="shopping_list_details_empty">No hay productos en esta lista.</string>
+    <string name="shopping_list_details_not_found">No se encontró ninguna lista para el id %1$d.</string>
     <string name="category_beverages">Bebidas</string>
     <string name="category_grocery">Mercado</string>
     <string name="category_dairy">Fiambres</string>

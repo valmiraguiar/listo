@@ -17,9 +17,11 @@ fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
         )
     }
 
-    entry<ListDetailsKey> {
+    entry<ListDetailsKey> { key ->
         ShoppingListDetailsRoute(
+            listId = key.listId,
             onEditListClickNavigate = navigator::navigateToEditList,
+            viewModel = hiltViewModel(),
         )
     }
 

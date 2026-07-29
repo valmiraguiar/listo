@@ -1,0 +1,155 @@
+package com.valmiraguiar.listo.feature.lists.presentation.details
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.valmiraguiar.listo.feature.common.extensions.onError
+import com.valmiraguiar.listo.feature.common.extensions.onSuccess
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDetails
+import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListDetailsUseCase
+import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsItemUiState
+import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiAction
+import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiResult
+import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class ShoppingListDetailsViewModel @Inject constructor(
+    private val observeShoppingListDetailsUseCase: ObserveShoppingListDetailsUseCase,
+) : ViewModel() {
+    private var observeDetailsJob: Job? = null
+    private var observedListId: Long? = null
+
+    private val _uiState = MutableStateFlow(ShoppingListDetailsUiState())
+    val uiState: StateFlow<ShoppingListDetailsUiState> = _uiState.asStateFlow()
+
+    private val _uiResult = MutableSharedFlow<ShoppingListDetailsUiResult>()
+    val uiResult: SharedFlow<ShoppingListDetailsUiResult> get() = _uiResult
+
+    fun dispatch(action: ShoppingListDetailsUiAction) {
+        when (action) {
+            is ShoppingListDetailsUiAction.FetchListDetails -> observeShoppingListDetails(action.listId)
+            is ShoppingListDetailsUiAction.ItemCheckedChange -> updateItemChecked(
+                itemId = action.itemId,
+                isChecked = action.isChecked,
+            )
+            is ShoppingListDetailsUiAction.EditListClick -> emitUiResult(
+                ShoppingListDetailsUiResult.OnEditListNavigate
+            )
+            is ShoppingListDetailsUiAction.BackClick -> emitUiResult(
+                ShoppingListDetailsUiResult.OnNavigateBack
+            )
+        }
+    }
+
+    private fun observeShoppingListDetails(listId: Long) {
+        if (observedListId == listId) return
+
+        observedListId = listId
+        observeDetailsJob?.cancel()
+        observeDetailsJob = observeShoppingListDetailsUseCase(listId).onStart {
+            updateUiState {
+                copy(
+                    isLoading = true,
+                    listId = listId,
+                    isNotFound = false,
+                )
+            }
+            emitUiResult(ShoppingListDetailsUiResult.OnLoading)
+        }.onCompletion {
+            updateUiState { copy(isLoading = false) }
+        }.onSuccess { details ->
+            handleShoppingListDetailsSuccess(
+                listId = listId,
+                details = details,
+            )
+        }.onError { error ->
+            handleError(error)
+        }.launchIn(viewModelScope)
+    }
+
+    private fun handleShoppingListDetailsSuccess(
+        listId: Long,
+        details: ShoppingListDetails?,
+    ) {
+        if (details == null) {
+            updateUiState {
+                copy(
+                    isLoading = false,
+                    listId = listId,
+                    title = "",
+                    items = emptyList(),
+                    isNotFound = true,
+                )
+            }
+            emitUiResult(ShoppingListDetailsUiResult.OnShowListNotFound)
+            return
+        }
+
+        val checkedItems = uiState.value.items.associate { item -> item.id to item.isChecked }
+        updateUiState {
+            copy(
+                isLoading = false,
+                listId = details.id,
+                title = details.title,
+                items = details.products.map { product ->
+                    ShoppingListDetailsItemUiState(
+                        id = product.id,
+                        title = product.title,
+                        classification = product.categoryName,
+                        quantity = product.quantity,
+                        unit = product.unit,
+                        isChecked = checkedItems[product.id] ?: false,
+                    )
+                }.sortedBy { item -> item.isChecked },
+                isNotFound = false,
+            )
+        }
+        emitUiResult(ShoppingListDetailsUiResult.OnShowListDetails)
+    }
+
+    private fun updateItemChecked(
+        itemId: Long,
+        isChecked: Boolean,
+    ) {
+        _uiState.update { current ->
+            current.copy(
+                items = current.items.map { item ->
+                    if (item.id == itemId) {
+                        item.copy(isChecked = isChecked)
+                    } else {
+                        item
+                    }
+                }.sortedBy { item -> item.isChecked },
+            )
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Log.e("app-error-log", error.toString())
+        updateUiState { copy(isLoading = false) }
+        emitUiResult(ShoppingListDetailsUiResult.OnError)
+    }
+
+    private fun emitUiResult(uiResult: ShoppingListDetailsUiResult) = viewModelScope.launch {
+        _uiResult.emit(uiResult)
+    }
+
+    private fun updateUiState(
+        reduce: ShoppingListDetailsUiState.() -> ShoppingListDetailsUiState,
+    ) {
+        _uiState.value = uiState.value.reduce()
+    }
+}

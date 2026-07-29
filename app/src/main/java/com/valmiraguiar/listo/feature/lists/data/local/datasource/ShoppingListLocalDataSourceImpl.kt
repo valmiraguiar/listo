@@ -4,8 +4,11 @@ import com.valmiraguiar.listo.feature.lists.data.local.dao.ShoppingListDao
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ProductEntity
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListEntity
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDetails
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListProduct
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -20,6 +23,29 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
                     id = entity.id,
                     title = entity.title,
                     createdAt = entity.createdAt,
+                )
+            }
+        }
+    }
+
+    override fun observeShoppingListDetails(listId: Long): Flow<ShoppingListDetails?> {
+        return combine(
+            shoppingListDao.observeShoppingListById(listId),
+            shoppingListDao.observeProductsWithCategoryByList(listId),
+        ) { list, products ->
+            list?.let {
+                ShoppingListDetails(
+                    id = it.id,
+                    title = it.title,
+                    products = products.map { product ->
+                        ShoppingListProduct(
+                            id = product.productId,
+                            title = product.productName,
+                            quantity = product.quantity,
+                            unit = product.unit,
+                            categoryName = product.categoryName,
+                        )
+                    },
                 )
             }
         }

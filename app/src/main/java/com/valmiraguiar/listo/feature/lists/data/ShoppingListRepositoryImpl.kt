@@ -2,6 +2,7 @@ package com.valmiraguiar.listo.feature.lists.data
 
 import com.valmiraguiar.listo.feature.lists.data.local.datasource.ShoppingListLocalDataSource
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDetails
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import com.valmiraguiar.listo.feature.lists.domain.repository.ShoppingListRepository
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,10 @@ class ShoppingListRepositoryImpl @Inject constructor(
 ) : ShoppingListRepository {
     override fun observeShoppingLists(): Flow<List<ShoppingListSummary>> {
         return shoppingListLocalDataSource.observeShoppingLists()
+    }
+
+    override fun observeShoppingListDetails(listId: Long): Flow<ShoppingListDetails?> {
+        return shoppingListLocalDataSource.observeShoppingListDetails(listId)
     }
 
     override suspend fun createShoppingList(draft: ShoppingListDraft): Long {

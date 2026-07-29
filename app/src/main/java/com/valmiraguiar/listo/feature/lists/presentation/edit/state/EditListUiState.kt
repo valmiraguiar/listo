@@ -14,5 +14,6 @@ data class EditListUiState(
 data class EditListItemUiState(
     val id: Long,
     val description: String,
+    val quantity: String,
     val categoryEnum: CategoryEnum,
 )

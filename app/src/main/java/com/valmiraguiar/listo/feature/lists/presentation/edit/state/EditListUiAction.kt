@@ -13,6 +13,10 @@ sealed interface EditListUiAction {
         val itemId: Long,
         val description: String,
     ) : EditListUiAction
+    data class ItemQuantityChange(
+        val itemId: Long,
+        val quantity: String,
+    ) : EditListUiAction
     data class ItemCategoryChange(
         val itemId: Long,
         val categoryEnum: CategoryEnum,
