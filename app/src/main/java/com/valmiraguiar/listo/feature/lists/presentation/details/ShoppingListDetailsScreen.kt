@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
@@ -20,8 +22,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -224,16 +225,17 @@ private fun ShoppingListItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .toggleable(
+                value = item.isChecked,
+                role = Role.Checkbox,
+                onValueChange = onCheckedChange,
+            )
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconToggleButton(
-            checked = item.isChecked,
-            onCheckedChange = onCheckedChange,
-            colors = IconButtonDefaults.iconToggleButtonColors(
-                contentColor = MaterialTheme.colorScheme.outline,
-                checkedContentColor = MaterialTheme.colorScheme.primary,
-            ),
+        Box(
+            modifier = Modifier.size(48.dp),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = if (item.isChecked) {
@@ -241,10 +243,11 @@ private fun ShoppingListItem(
                 } else {
                     Icons.Outlined.Circle
                 },
-                contentDescription = if (item.isChecked) {
-                    "Desmarcar item"
+                contentDescription = null,
+                tint = if (item.isChecked) {
+                    MaterialTheme.colorScheme.primary
                 } else {
-                    "Marcar item"
+                    MaterialTheme.colorScheme.outline
                 },
             )
         }
