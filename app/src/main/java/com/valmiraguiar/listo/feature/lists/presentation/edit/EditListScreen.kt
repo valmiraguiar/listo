@@ -59,7 +59,9 @@ import com.valmiraguiar.listo.feature.common.components.UnderlinedTextField
 import com.valmiraguiar.listo.feature.common.theme.BackgroundVariant
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
-import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListItemUiState
+import com.valmiraguiar.listo.feature.lists.domain.model.Product
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
+import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiState
@@ -107,9 +109,9 @@ fun EditListScreen(
     var focusedItemId by remember { mutableStateOf<Long?>(null) }
     var shouldFocusAddedItem by remember { mutableStateOf(false) }
 
-    LaunchedEffect(uiState.items.size) {
-        if (shouldFocusAddedItem && uiState.items.isNotEmpty()) {
-            focusedItemId = uiState.items.last().id
+    LaunchedEffect(uiState.shoppingList?.products?.size) {
+        if (shouldFocusAddedItem && uiState.shoppingList?.products?.isNotEmpty() == true) {
+            focusedItemId = uiState.shoppingList.products.last().id
             listState.animateScrollToLastItem()
             shouldFocusAddedItem = false
         }
@@ -130,7 +132,7 @@ fun EditListScreen(
                 }
             }
 
-            uiState.items.isEmpty() -> {
+            uiState.shoppingList?.products?.isEmpty() == true -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -196,7 +198,7 @@ private fun EditListContent(
             contentType = "list_name",
         ) {
             UnderlinedTextField(
-                value = uiState.listName,
+                value = uiState.shoppingList?.title.orEmpty(),
                 onValueChange = {
                     onUiEvent(
                         EditListUiAction.ListNameChange(
@@ -211,8 +213,9 @@ private fun EditListContent(
             )
         }
 
+        if(uiState.shoppingList?.products != null)
         items(
-            items = uiState.items,
+            items = uiState.shoppingList.products,
             key = { item -> item.id },
             contentType = { "edit_list_item" },
         ) { item ->
@@ -266,7 +269,7 @@ private fun EditListContent(
 
 @Composable
 private fun EditListItem(
-    item: EditListItemUiState,
+    item: Product,
     requestDescriptionFocus: Boolean,
     onDescriptionChange: (String) -> Unit,
     onQuantityChange: (String) -> Unit,
@@ -331,7 +334,7 @@ private fun EditListItem(
             )
 
             CategoryDropdown(
-                selected = item.categoryEnum,
+                selected = item.category,
                 onCategorySelected = onCategorySelected,
                 modifier = Modifier
                     .weight(1f)
@@ -470,20 +473,28 @@ private fun EditListScreenPreview() {
     ListoTheme {
         EditListScreen(
             uiState = EditListUiState(
-                items = listOf(
-                    EditListItemUiState(
+                shoppingList =
+                    ShoppingList(
                         id = 1L,
-                        description = "Arroz",
-                        quantity = "2",
-                        categoryEnum = CategoryEnum.Grocery,
-                    ),
-                    EditListItemUiState(
-                        id = 2L,
-                        description = "Leite",
-                        quantity = "1",
-                        categoryEnum = CategoryEnum.Dairy,
-                    ),
-                ),
+                        title = "Lista1",
+                        products = listOf(
+                            Product(
+                                id = 1L,
+                                description = "Arroz",
+                                quantity = "2",
+                                category = CategoryEnum.Grocery,
+                                unit = UnitEnum.Unit,
+                            ),
+                            Product(
+                                id = 2L,
+                                description = "Leite",
+                                quantity = "1",
+                                category = CategoryEnum.Dairy,
+                                unit = UnitEnum.Unit,
+                            ),
+                        ),
+                        createdAt = 1786048252969L
+                    )
             ),
             onUiEvent = {},
         )

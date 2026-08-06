@@ -10,7 +10,7 @@ interface ShoppingListLocalDataSource {
     suspend fun getShoppingList(listId: Long): ShoppingList?
     fun observeProducts(listId: Long): Flow<List<Product>>
     suspend fun getProduct(productId: Long): Product?
-    suspend fun createShoppingList(title: String): Long
+    suspend fun createShoppingList(shoppingList: ShoppingList)
     suspend fun updateShoppingListTitle(shoppingListId: Long, title: String)
     suspend fun updateShoppingList(shoppingList: ShoppingList)
     suspend fun createProduct(shoppingListId: Long, product: Product): Long

@@ -5,10 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ShoppingListRepository {
     fun observeShoppingLists(): Flow<List<ShoppingList>>
-//
-//    fun observeShoppingListDetails(listId: Long): Flow<ShoppingListDetails?>
-//
-//    suspend fun createShoppingList(draft: ShoppingListDraft): Long
-//
-//    suspend fun updateShoppingList(listId: Long, draft: ShoppingListDraft): Long
+    suspend fun createShoppingList(shoppingList: ShoppingList)
+    fun observeShoppingListDetails(listId: Long): Flow<ShoppingList?>
+    suspend fun updateShoppingList(shoppingList: ShoppingList)
 }

@@ -290,7 +290,6 @@ private fun UnitEnum.label(): String {
         UnitEnum.Kilogram -> R.string.unit_kg
         UnitEnum.Gram -> R.string.unit_g
         UnitEnum.Liter -> R.string.unit_l
-        UnitEnum.Milliliter -> R.string.unit_ml
         UnitEnum.Pack -> R.string.unit_pack
     }
     return stringResource(id = stringId)

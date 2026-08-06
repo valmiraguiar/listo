@@ -7,6 +7,7 @@ import com.valmiraguiar.listo.feature.lists.data.local.converter.toEntity
 import com.valmiraguiar.listo.feature.lists.data.local.dao.ProductDao
 import com.valmiraguiar.listo.feature.lists.data.local.dao.ShoppingListDao
 import com.valmiraguiar.listo.feature.lists.data.local.database.ShoppingListDatabase
+import com.valmiraguiar.listo.feature.lists.data.local.entity.ProductEntity
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListEntity
 import com.valmiraguiar.listo.feature.lists.domain.model.Product
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
@@ -57,17 +58,35 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
             ?.toDomain()
     }
 
-    override suspend fun createShoppingList(title: String): Long {
-        require(title.isNotBlank()) {
+    override suspend fun createShoppingList(shoppingList: ShoppingList) {
+        require(shoppingList.title.isNotBlank()) {
             R.string.shopping_list_data_source_invalid_title
         }
 
-        return shoppingListDao.insert(
-            ShoppingListEntity(
-                title = title.trim(),
-                createdAt = System.currentTimeMillis()
-            ),
-        )
+        database.withTransaction {
+            val createdListId = shoppingListDao.insert(
+                ShoppingListEntity(
+                    title = shoppingList.title.trim(),
+                    createdAt = System.currentTimeMillis()
+                ),
+            )
+
+            check(createdListId == ZERO_LONG) {
+                "${R.string.shopping_list_data_source_list_not_found}: ${shoppingList.id}"
+            }
+
+            shoppingList.products.forEach { product ->
+                productDao.insert(
+                    ProductEntity(
+                        shoppingListId = createdListId,
+                        description = product.description,
+                        quantity = product.quantity,
+                        unit = product.unit,
+                        category = product.category,
+                    )
+                )
+            }
+        }
     }
 
     override suspend fun updateShoppingListTitle(shoppingListId: Long, title: String) {
@@ -202,6 +221,7 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
 
     private companion object {
         const val ZERO = 0
+        const val ZERO_LONG = 0L
         const val ONE = 1
     }
 }

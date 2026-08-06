@@ -42,17 +42,3 @@ object ListDatabaseModule {
 //        return database.shoppingListDao()
 //    }
 }
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class ListRepositoryModule {
-    @Binds
-    abstract fun bindShoppingListLocalDataSource(
-        localDataSource: ShoppingListLocalDataSourceImpl,
-    ): ShoppingListLocalDataSource
-
-    @Binds
-    abstract fun bindShoppingListRepository(
-        repository: ShoppingListRepositoryImpl,
-    ): ShoppingListRepository
-}

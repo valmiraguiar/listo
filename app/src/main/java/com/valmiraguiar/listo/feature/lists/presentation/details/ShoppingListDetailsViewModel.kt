@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.common.extensions.onError
 import com.valmiraguiar.listo.feature.common.extensions.onSuccess
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDetails
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListDetailsUseCase
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsItemUiState
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiAction
@@ -44,9 +44,11 @@ class ShoppingListDetailsViewModel @Inject constructor(
                 itemId = action.itemId,
                 isChecked = action.isChecked,
             )
+
             is ShoppingListDetailsUiAction.EditListClick -> emitUiResult(
                 ShoppingListDetailsUiResult.OnEditListNavigate
             )
+
             is ShoppingListDetailsUiAction.BackClick -> emitUiResult(
                 ShoppingListDetailsUiResult.OnNavigateBack
             )
@@ -66,11 +68,10 @@ class ShoppingListDetailsViewModel @Inject constructor(
             emitUiResult(ShoppingListDetailsUiResult.OnLoading)
         }.onCompletion {
             updateUiState { copy(isLoading = false) }
-        }.onSuccess { details ->
-            println("ONSUCCESS -> ${details}")
+        }.onSuccess { shoppingList ->
             handleShoppingListDetailsSuccess(
                 listId = listId,
-                details = details,
+                shoppingList = shoppingList,
             )
         }.onError { error ->
             handleError(error)
@@ -79,9 +80,9 @@ class ShoppingListDetailsViewModel @Inject constructor(
 
     private fun handleShoppingListDetailsSuccess(
         listId: Long,
-        details: ShoppingListDetails?,
+        shoppingList: ShoppingList?,
     ) {
-        if (details == null) {
+        if (shoppingList == null) {
             updateUiState {
                 copy(
                     isLoading = false,
@@ -99,13 +100,13 @@ class ShoppingListDetailsViewModel @Inject constructor(
         updateUiState {
             copy(
                 isLoading = false,
-                listId = details.id,
-                title = details.title,
-                items = details.products.map { product ->
+                listId = shoppingList.id,
+                title = shoppingList.title,
+                items = shoppingList.products.map { product ->
                     ShoppingListDetailsItemUiState(
                         id = product.id,
-                        title = product.title,
-                        classification = product.categoryName,
+                        title = product.description,
+                        classification = product.category.name,
                         quantity = product.quantity,
                         unit = product.unit,
                         isChecked = checkedItems[product.id] ?: false,

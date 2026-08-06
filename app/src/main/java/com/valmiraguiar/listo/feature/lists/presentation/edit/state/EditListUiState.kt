@@ -1,21 +1,16 @@
 package com.valmiraguiar.listo.feature.lists.presentation.edit.state
 
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 
 data class EditListUiState(
     val isLoading: Boolean = false,
     val isSaving: Boolean = false,
     val editingListId: Long? = null,
-    val listName: String = "",
-    val items: List<EditListItemUiState> = emptyList(),
+    val shoppingList: ShoppingList? = null,
 ) {
     val canSave: Boolean
-        get() = items.any { item -> item.description.isNotBlank() } && !isLoading && !isSaving
+        get() = shoppingList?.products?.any { item -> item.description.isNotBlank() } == true
+                && !isLoading
+                && !isSaving
 }
-
-data class EditListItemUiState(
-    val id: Long,
-    val description: String,
-    val quantity: String,
-    val categoryEnum: CategoryEnum,
-)

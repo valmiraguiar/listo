@@ -12,16 +12,16 @@ class ShoppingListRepositoryImpl @Inject constructor(
     override fun observeShoppingLists(): Flow<List<ShoppingList>> {
         return shoppingListLocalDataSource.observeShoppingLists()
     }
-//
-//    override fun observeShoppingListDetails(listId: Long): Flow<ShoppingListDetails?> {
-//        return shoppingListLocalDataSource.observeShoppingListDetails(listId)
-//    }
-//
-//    override suspend fun createShoppingList(draft: ShoppingListDraft): Long {
-//        return shoppingListLocalDataSource.createShoppingList(draft)
-//    }
-//
-//    override suspend fun updateShoppingList(listId: Long, draft: ShoppingListDraft): Long {
-//        return shoppingListLocalDataSource.updateShoppingList(listId, draft)
-//    }
+
+    override suspend fun createShoppingList(shoppingList: ShoppingList) {
+        shoppingListLocalDataSource.createShoppingList(shoppingList)
+    }
+
+    override fun observeShoppingListDetails(listId: Long): Flow<ShoppingList?> {
+        return shoppingListLocalDataSource.observeShoppingList(listId)
+    }
+
+    override suspend fun updateShoppingList(shoppingList: ShoppingList) {
+        return shoppingListLocalDataSource.updateShoppingList(shoppingList)
+    }
 }

@@ -1,17 +1,16 @@
 package com.valmiraguiar.listo.feature.lists.presentation.edit
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.common.flow.FlowResult
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraftItem
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDetails
+import com.valmiraguiar.listo.feature.lists.domain.model.Product
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.lists.domain.usecase.CreateShoppingListUseCase
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListDetailsUseCase
 import com.valmiraguiar.listo.feature.lists.domain.usecase.UpdateShoppingListUseCase
-import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListItemUiState
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiState
@@ -48,25 +47,20 @@ class EditListViewModel @Inject constructor(
             is EditListUiAction.BackClick -> emitUiResult(EditListUiResult.OnNavigateBack)
             is EditListUiAction.ListNameChange -> updateListName(action.listName)
             is EditListUiAction.ItemCategoryChange -> updateItem(action.itemId) { item ->
-                item.copy(categoryEnum = action.categoryEnum)
+                item.copy(category = action.categoryEnum)
             }
-
             is EditListUiAction.ItemDescriptionChange -> updateItem(action.itemId) { item ->
                 item.copy(description = action.description)
             }
-
             is EditListUiAction.ItemQuantityChange -> updateItem(action.itemId) { item ->
                 item.copy(quantity = action.quantity)
             }
-
             is EditListUiAction.RemoveItemClick -> removeItem(action.itemId)
             is EditListUiAction.SaveListClick -> saveList()
         }
     }
 
-    private fun initialUiState(): EditListUiState = EditListUiState(
-        items = listOf(newItem()),
-    )
+    private fun initialUiState(): EditListUiState = EditListUiState()
 
     private fun openList(listId: Long?) {
         observeListJob?.cancel()
@@ -83,14 +77,13 @@ class EditListViewModel @Inject constructor(
                     isLoading = true,
                     isSaving = false,
                     editingListId = listId,
-                    items = emptyList(),
                 )
             }
 
             observeShoppingListDetailsUseCase(listId).collect { result ->
                 when (result) {
                     is FlowResult.Success -> handleListDetailsLoaded(
-                        details = result.data,
+                        shoppingList = result.data,
                         listId = listId,
                     )
 
@@ -101,31 +94,22 @@ class EditListViewModel @Inject constructor(
     }
 
     private fun handleListDetailsLoaded(
-        details: ShoppingListDetails?,
+        shoppingList: ShoppingList?,
         listId: Long,
     ) {
-        if (details == null) {
+        if (shoppingList == null) {
             handleListDetailsLoadError()
             return
         }
 
-        val items = details.products.map { product ->
-            EditListItemUiState(
-                id = product.id,
-                description = product.title,
-                quantity = product.quantity,
-                categoryEnum = product.categoryName.toCategoryEnum(),
-            )
-        }
-        nextItemId = (items.maxOfOrNull { item -> item.id } ?: 0L) + 1
+        nextItemId = (shoppingList.products.maxOfOrNull { item -> item.id } ?: 0L) + 1
 
         _uiState.update {
             it.copy(
                 isLoading = false,
                 isSaving = false,
                 editingListId = listId,
-                listName = details.title,
-                items = items,
+                shoppingList = shoppingList,
             )
         }
     }
@@ -137,14 +121,20 @@ class EditListViewModel @Inject constructor(
 
     private fun addItem() {
         _uiState.update { current ->
-            current.copy(items = current.items + newItem())
+            current.copy(
+                shoppingList = current.shoppingList?.copy(
+                    products = current.shoppingList.products + newItem()
+                )
+            )
         }
     }
 
     private fun removeItem(itemId: Long) {
         _uiState.update { current ->
             current.copy(
-                items = current.items.filterNot { item -> item.id == itemId },
+                shoppingList = current.shoppingList?.copy(
+                    products = current.shoppingList.products.filterNot { item -> item.id == itemId }
+                )
             )
         }
     }
@@ -154,20 +144,24 @@ class EditListViewModel @Inject constructor(
     ) {
         _uiState.update { current ->
             current.copy(
-                listName = listName
+                shoppingList = current.shoppingList?.copy(
+                    title = listName
+                )
             )
         }
     }
 
     private fun updateItem(
         itemId: Long,
-        transform: (EditListItemUiState) -> EditListItemUiState,
+        transform: (Product) -> Product,
     ) {
         _uiState.update { current ->
             current.copy(
-                items = current.items.map { item ->
-                    if (item.id == itemId) transform(item) else item
-                },
+                shoppingList = current.shoppingList?.copy(
+                    products = current.shoppingList.products.map { item ->
+                        if (item.id == itemId) transform(item) else item
+                    }
+                )
             )
         }
     }
@@ -176,21 +170,25 @@ class EditListViewModel @Inject constructor(
         val currentState = _uiState.value
         if (!currentState.canSave) return
 
+        if (currentState.shoppingList == null)
+            return
+
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true) }
 
             runCatching {
-                currentState.editingListId?.let { listId ->
+                currentState.editingListId?.let {
                     updateShoppingListUseCase(
-                        listId = listId,
-                        draft = currentState.toDraft(),
+                        shoppingList = currentState.shoppingList,
                     )
-                } ?: createShoppingListUseCase(currentState.toDraft())
-            }.onSuccess { listId ->
+                } ?: createShoppingListUseCase(currentState.shoppingList)
+            }.onSuccess {
                 observeListJob?.cancel()
-                _uiResult.emit(EditListUiResult.OnListSaved(listId))
+                _uiResult.emit(EditListUiResult.OnListSaved)
                 _uiState.update { initialUiState() }
-            }.onFailure {
+            }.onFailure { cause ->
+                Log.e("app", "error cause -> $cause")
+
                 _uiResult.emit(EditListUiResult.OnError)
                 _uiState.update { it.copy(isSaving = false) }
             }
@@ -201,35 +199,16 @@ class EditListViewModel @Inject constructor(
         _uiResult.emit(uiResult)
     }
 
-    private fun newItem(): EditListItemUiState {
+    private fun newItem(): Product {
         val id = nextItemId
         nextItemId += 1
-        return EditListItemUiState(
+        return Product(
             id = id,
             description = "",
             quantity = "",
-            categoryEnum = CategoryEnum.Grocery,
+            unit = UnitEnum.Unit,
+            category = CategoryEnum.Grocery,
         )
-    }
-
-    private fun EditListUiState.toDraft(): ShoppingListDraft {
-        val filledItems = items.filter { item -> item.description.isNotBlank() }
-
-        return ShoppingListDraft(
-            title = listName,
-            items = filledItems.map { item ->
-                ShoppingListDraftItem(
-                    quantity = item.quantity.trim(),
-                    unit = UnitEnum.Unit,
-                    description = item.description.trim(),
-                    categoryEnum = item.categoryEnum,
-                )
-            },
-        )
-    }
-
-    private fun String.toCategoryEnum(): CategoryEnum {
-        return runCatching { CategoryEnum.valueOf(this) }.getOrDefault(CategoryEnum.Grocery)
     }
 
     private companion object {
