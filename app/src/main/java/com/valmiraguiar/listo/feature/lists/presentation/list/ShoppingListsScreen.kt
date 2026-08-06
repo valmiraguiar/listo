@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.LaunchOnce
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiState
@@ -186,7 +187,7 @@ private fun ShoppingListsContent(
 
 @Composable
 private fun ShoppingListCard(
-    shoppingList: ShoppingListSummary,
+    shoppingList: ShoppingList,
     onClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -242,20 +243,23 @@ private fun ShoppingListsScreenPreview() {
             uiState = ShoppingListsUiState(
                 isLoading = false,
                 shoppingLists = listOf(
-                    ShoppingListSummary(
+                    ShoppingList(
                         id = 1L,
                         title = "Compras da semana",
                         createdAt = 1_784_324_400_000L,
+                        products = listOf(),
                     ),
-                    ShoppingListSummary(
+                    ShoppingList(
                         id = 2L,
                         title = "Churrasco de domingo",
                         createdAt = 1_784_238_000_000L,
+                        products = listOf(),
                     ),
-                    ShoppingListSummary(
+                    ShoppingList(
                         id = 3L,
                         title = "Churrasco de domingo",
                         createdAt = 1_784_238_000_000L,
+                        products = listOf(),
                     ),
                 ),
             ),

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.common.extensions.onError
 import com.valmiraguiar.listo.feature.common.extensions.onSuccess
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListsUseCase
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction
@@ -73,7 +74,7 @@ class ShoppingListsViewModel @Inject constructor(
         Log.e("app-error-log", error.toString()) // TODO - fix error log
     }
 
-    private fun handleFetchShoppingListsSuccess(resume: List<ShoppingListSummary>) {
+    private fun handleFetchShoppingListsSuccess(resume: List<ShoppingList>) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
@@ -86,35 +87,5 @@ class ShoppingListsViewModel @Inject constructor(
 
     private fun updateUiState(reduce: ShoppingListsUiState.() -> ShoppingListsUiState) {
         _uiState.value = uiState.value.reduce()
-    }
-
-    private companion object {
-        val MOCK = listOf(
-            ShoppingListSummary(
-                id = 1L,
-                title = "Teste1",
-                createdAt = 1_784_324_400_000L
-            ),
-            ShoppingListSummary(
-                id = 2L,
-                title = "Teste2",
-                createdAt = 1_784_324_400_000L
-            ),
-            ShoppingListSummary(
-                id = 3L,
-                title = "Teste3",
-                createdAt = 1_784_324_400_000L
-            ),
-            ShoppingListSummary(
-                id = 4L,
-                title = "Teste4",
-                createdAt = 1_784_324_400_000L
-            ),
-            ShoppingListSummary(
-                id = 5L,
-                title = "Teste5",
-                createdAt = 1_784_324_400_000L
-            )
-        )
     }
 }

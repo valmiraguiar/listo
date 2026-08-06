@@ -7,7 +7,7 @@ data class ShoppingListWithProducts(
     @Embedded
     val shoppingList: ShoppingListEntity,
     @Relation(
-        parentColumn = "product_id",
+        parentColumn = "list_id",
         entityColumn = "shopping_list_id",
         entity = ProductEntity::class
     )

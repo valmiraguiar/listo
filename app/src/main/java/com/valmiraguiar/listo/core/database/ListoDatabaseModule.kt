@@ -2,8 +2,9 @@ package com.valmiraguiar.listo.core.database
 
 import android.content.Context
 import androidx.room.Room
-import com.valmiraguiar.listo.feature.lists.data.ShoppingListRepositoryImpl
+import com.valmiraguiar.listo.feature.lists.data.repository.ShoppingListRepositoryImpl
 import com.valmiraguiar.listo.feature.lists.data.local.datasource.ShoppingListLocalDataSource
+import com.valmiraguiar.listo.feature.lists.data.local.datasource.ShoppingListLocalDataSourceImpl
 import com.valmiraguiar.listo.feature.lists.domain.repository.ShoppingListRepository
 import dagger.Binds
 import dagger.Module

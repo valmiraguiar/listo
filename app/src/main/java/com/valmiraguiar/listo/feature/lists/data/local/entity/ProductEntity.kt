@@ -13,7 +13,7 @@ import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
     foreignKeys = [
         ForeignKey(
             entity = ShoppingListEntity::class,
-            parentColumns = ["product_id"],
+            parentColumns = ["list_id"],
             childColumns = ["shopping_list_id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE

@@ -15,7 +15,7 @@ interface ProductDao {
     @Transaction
     @Query(
         """
-            SELECT * FROM products ORDER BY product_name ASC
+            SELECT * FROM products WHERE shopping_list_id = :listId ORDER BY product_name ASC
         """
     )
     fun observeByShoppingListId(
@@ -53,7 +53,7 @@ interface ProductDao {
 
     @Query(
         """
-            DELETE FROM products WHERE product_id = :productId AND shopping_list_id = :listId
+            DELETE FROM products WHERE product_id = :productId AND shopping_list_id = :shoppingListId
         """
     )
     suspend fun deleteById(
