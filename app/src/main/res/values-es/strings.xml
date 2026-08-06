@@ -55,4 +55,10 @@
     <string name="task_3_summary">Base lista para una futura modularización.</string>
     <string name="task_3_description">El contrato del repositorio y los casos de uso ya dejan espacio para cambiar la fuente de datos sin tocar la capa de presentación.</string>
     <string name="detail_list_add_item">Agregar elemento</string>
+
+    <string name="shopping_list_data_source_invalid_title">O título da lista não pode estar vazio</string>
+    <string name="shopping_list_data_source_invalid_id">O ID da lista deve ser válido</string>
+    <string name="shopping_list_data_source_invalid_description">A descrição do produto não pode estar vazia</string>
+    <string name="shopping_list_data_source_list_not_found">Lista não encontrada</string>
+    <string name="shopping_list_data_source_product_not_found">Lista não encontrada</string>
 </resources>
