@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
-import com.valmiraguiar.listo.feature.common.components.LaunchOnce
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsItemUiState
@@ -49,7 +48,7 @@ import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingL
 @Composable
 fun ShoppingListDetailsRoute(
     listId: Long,
-    onEditListClickNavigate: () -> Unit,
+    onEditListClickNavigate: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ShoppingListDetailsViewModel,
 ) {
@@ -58,7 +57,7 @@ fun ShoppingListDetailsRoute(
     LaunchedEffect(viewModel.uiResult) {
         viewModel.uiResult.collect { result ->
             when (result) {
-                is ShoppingListDetailsUiResult.OnEditListNavigate -> onEditListClickNavigate()
+                is ShoppingListDetailsUiResult.OnEditListNavigate -> onEditListClickNavigate(listId)
                 is ShoppingListDetailsUiResult.OnError -> Unit
                 is ShoppingListDetailsUiResult.OnLoading -> Unit
                 is ShoppingListDetailsUiResult.OnNavigateBack -> Unit
@@ -83,7 +82,7 @@ fun ShoppingListDetailsScreen(
     onUiEvent: (ShoppingListDetailsUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LaunchOnce {
+    LaunchedEffect(listId) {
         onUiEvent(ShoppingListDetailsUiAction.FetchListDetails(listId))
     }
 

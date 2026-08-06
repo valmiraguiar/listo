@@ -3,6 +3,9 @@ package com.valmiraguiar.listo.feature.lists.presentation.edit.state
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 
 sealed interface EditListUiAction {
+    data class OpenList(
+        val listId: Long?,
+    ) : EditListUiAction
     data object AddItemClick : EditListUiAction
     data object SaveListClick : EditListUiAction
     data object BackClick : EditListUiAction

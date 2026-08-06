@@ -3,12 +3,14 @@ package com.valmiraguiar.listo.feature.lists.presentation.edit.state
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 
 data class EditListUiState(
+    val isLoading: Boolean = false,
     val isSaving: Boolean = false,
+    val editingListId: Long? = null,
     val listName: String = "",
     val items: List<EditListItemUiState> = emptyList(),
 ) {
     val canSave: Boolean
-        get() = items.any { item -> item.description.isNotBlank() } && !isSaving
+        get() = items.any { item -> item.description.isNotBlank() } && !isLoading && !isSaving
 }
 
 data class EditListItemUiState(

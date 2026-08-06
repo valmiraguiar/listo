@@ -4,10 +4,10 @@
 //import com.valmiraguiar.listo.feature.lists.domain.repository.ShoppingListRepository
 //import javax.inject.Inject
 //
-//class CreateShoppingListUseCase @Inject constructor(
+//class UpdateShoppingListUseCase @Inject constructor(
 //    private val shoppingListRepository: ShoppingListRepository,
 //) {
-//    suspend operator fun invoke(draft: ShoppingListDraft): Long {
-//        return shoppingListRepository.createShoppingList(draft)
+//    suspend operator fun invoke(listId: Long, draft: ShoppingListDraft): Long {
+//        return shoppingListRepository.updateShoppingList(listId, draft)
 //    }
 //}

@@ -5,8 +5,7 @@ enum class UnitEnum(val id: Long) {
     Kilogram(id = 2),
     Gram(id = 3),
     Liter(id = 4),
-    Milliliter(id = 5),
-    Pack(id = 6);
+    Pack(id = 5);
 
     companion object {
         fun fromId(id: Long) = UnitEnum.entries.first { it.id == id }

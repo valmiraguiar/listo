@@ -12,7 +12,7 @@ fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
     entry<ShoppingListsKey> {
         ShoppingListsRoute(
             onShoppingListClickNavigate = navigator::navigateToListDetails,
-            onCreateListClickNavigate = navigator::navigateToEditList,
+            onCreateListClickNavigate = { navigator.navigateToEditList() },
             viewModel = hiltViewModel()
         )
     }
@@ -20,13 +20,14 @@ fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
     entry<ListDetailsKey> { key ->
         ShoppingListDetailsRoute(
             listId = key.listId,
-            onEditListClickNavigate = navigator::navigateToEditList,
+            onEditListClickNavigate = { listId -> navigator.navigateToEditList(listId) },
             viewModel = hiltViewModel(),
         )
     }
 
-    entry<EditListKey> {
+    entry<EditListKey> { key ->
         EditListRoute(
+            listId = key.listId,
             onBack = navigator::navigateBack,
         )
     }

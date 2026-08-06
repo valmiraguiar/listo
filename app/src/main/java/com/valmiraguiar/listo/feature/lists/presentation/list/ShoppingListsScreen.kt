@@ -36,7 +36,6 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.LaunchOnce
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiState

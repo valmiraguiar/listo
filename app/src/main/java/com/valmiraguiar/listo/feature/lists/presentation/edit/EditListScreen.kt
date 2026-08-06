@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -38,7 +39,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -69,11 +69,16 @@ private const val SCROLL_ANIMATION_DURATION_MILLIS = 450
 
 @Composable
 fun EditListRoute(
+    listId: Long?,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: EditListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(listId) {
+        viewModel.dispatch(EditListUiAction.OpenList(listId))
+    }
 
     LaunchedEffect(viewModel.uiResult) {
         viewModel.uiResult.collect { result ->
@@ -99,15 +104,15 @@ fun EditListScreen(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
-    var previousItemCount by remember { mutableIntStateOf(uiState.items.size) }
     var focusedItemId by remember { mutableStateOf<Long?>(null) }
+    var shouldFocusAddedItem by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.items.size) {
-        if (uiState.items.size > previousItemCount && uiState.items.isNotEmpty()) {
+        if (shouldFocusAddedItem && uiState.items.isNotEmpty()) {
             focusedItemId = uiState.items.last().id
             listState.animateScrollToLastItem()
+            shouldFocusAddedItem = false
         }
-        previousItemCount = uiState.items.size
     }
 
     Box(
@@ -116,6 +121,15 @@ fun EditListScreen(
             .background(color = BackgroundVariant),
     ) {
         when {
+            uiState.isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
             uiState.items.isEmpty() -> {
                 Box(
                     modifier = Modifier
@@ -143,16 +157,19 @@ fun EditListScreen(
             }
         }
 
-        EditListFloatingActions(
-            canSave = uiState.canSave,
-            onAddItem = {
-                onUiEvent(EditListUiAction.AddItemClick)
-            },
-            onSaveList = {
-                onUiEvent(EditListUiAction.SaveListClick)
-            },
-            modifier = Modifier.align(Alignment.BottomEnd),
-        )
+        if (!uiState.isLoading) {
+            EditListFloatingActions(
+                canSave = uiState.canSave,
+                onAddItem = {
+                    shouldFocusAddedItem = true
+                    onUiEvent(EditListUiAction.AddItemClick)
+                },
+                onSaveList = {
+                    onUiEvent(EditListUiAction.SaveListClick)
+                },
+                modifier = Modifier.align(Alignment.BottomEnd),
+            )
+        }
     }
 }
 

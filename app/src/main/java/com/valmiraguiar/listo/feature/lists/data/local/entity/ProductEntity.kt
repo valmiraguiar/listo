@@ -9,14 +9,6 @@ import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 
 @Entity(
     tableName = "products",
-    foreignKeys = [
-        ForeignKey(
-            entity = CategoryEntity::class,
-            parentColumns = ["category_id"],
-            childColumns = ["category_id"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ],
     indices = [Index("category_id")]
 )
 data class ProductEntity(

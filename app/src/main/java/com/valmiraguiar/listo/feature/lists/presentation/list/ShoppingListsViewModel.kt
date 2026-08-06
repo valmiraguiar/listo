@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.common.extensions.onError
 import com.valmiraguiar.listo.feature.common.extensions.onSuccess
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListSummary
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListsUseCase
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction

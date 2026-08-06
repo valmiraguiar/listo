@@ -11,7 +11,7 @@ data object ShoppingListsKey : NavKey
 data class ListDetailsKey(val listId: Long) : NavKey
 
 @Serializable
-data object EditListKey : NavKey
+data class EditListKey(val listId: Long? = null) : NavKey
 
 fun ListoNavigator.navigateToLists() {
     navigate(ShoppingListsKey)
@@ -21,6 +21,6 @@ fun ListoNavigator.navigateToListDetails(listId: Long) {
     navigate(ListDetailsKey(listId = listId))
 }
 
-fun ListoNavigator.navigateToEditList() {
-    navigate(EditListKey)
+fun ListoNavigator.navigateToEditList(listId: Long? = null) {
+    navigate(EditListKey(listId = listId))
 }

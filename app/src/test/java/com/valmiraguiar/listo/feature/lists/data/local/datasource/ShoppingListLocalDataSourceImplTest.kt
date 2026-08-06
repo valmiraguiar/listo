@@ -1,12 +1,11 @@
 package com.valmiraguiar.listo.feature.lists.data.local.datasource
 
-import com.valmiraguiar.listo.feature.lists.data.local.dao.ShoppingListDao
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ProductEntity
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListEntity
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraftItem
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
-import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -73,6 +72,66 @@ class ShoppingListLocalDataSourceImplTest {
         )
         coVerify(exactly = 1) {
             shoppingListDao.insertShoppingListWithItems(any(), any())
+        }
+    }
+
+    @Test
+    fun `updateShoppingList maps draft into local entities before persisting changes`() = runTest {
+        val itemsSlot = slot<List<ProductEntity>>()
+        val draft = ShoppingListDraft(
+            title = "Feira atualizada",
+            items = listOf(
+                ShoppingListDraftItem(
+                    quantity = "3",
+                    unit = UnitEnum.Unit,
+                    description = "Banana",
+                    categoryEnum = CategoryEnum.Grocery,
+                ),
+                ShoppingListDraftItem(
+                    quantity = "2",
+                    unit = UnitEnum.Liter,
+                    description = "Leite",
+                    categoryEnum = CategoryEnum.Dairy,
+                ),
+            ),
+        )
+        coEvery {
+            shoppingListDao.updateShoppingListWithItems(
+                listId = 15L,
+                title = "Feira atualizada",
+                items = capture(itemsSlot),
+            )
+        } returns 15L
+
+        val result = localDataSource.updateShoppingList(
+            listId = 15L,
+            draft = draft,
+        )
+
+        assertEquals(15L, result)
+        assertEquals(
+            listOf(
+                ProductEntity(
+                    productName = "Banana",
+                    quantity = "3",
+                    unit = UnitEnum.Unit,
+                    categoryId = CategoryEnum.Grocery.id,
+                ),
+                ProductEntity(
+                    productName = "Leite",
+                    quantity = "2",
+                    unit = UnitEnum.Liter,
+                    categoryId = CategoryEnum.Dairy.id,
+                ),
+            ),
+            itemsSlot.captured,
+        )
+        coVerify(exactly = 1) {
+            shoppingListDao.updateShoppingListWithItems(
+                listId = 15L,
+                title = "Feira atualizada",
+                items = any(),
+            )
         }
     }
 }

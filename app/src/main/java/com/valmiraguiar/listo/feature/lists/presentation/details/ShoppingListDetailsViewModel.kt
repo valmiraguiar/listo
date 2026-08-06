@@ -30,7 +30,6 @@ class ShoppingListDetailsViewModel @Inject constructor(
     private val observeShoppingListDetailsUseCase: ObserveShoppingListDetailsUseCase,
 ) : ViewModel() {
     private var observeDetailsJob: Job? = null
-    private var observedListId: Long? = null
 
     private val _uiState = MutableStateFlow(ShoppingListDetailsUiState())
     val uiState: StateFlow<ShoppingListDetailsUiState> = _uiState.asStateFlow()
@@ -55,9 +54,6 @@ class ShoppingListDetailsViewModel @Inject constructor(
     }
 
     private fun observeShoppingListDetails(listId: Long) {
-        if (observedListId == listId) return
-
-        observedListId = listId
         observeDetailsJob?.cancel()
         observeDetailsJob = observeShoppingListDetailsUseCase(listId).onStart {
             updateUiState {
@@ -71,6 +67,7 @@ class ShoppingListDetailsViewModel @Inject constructor(
         }.onCompletion {
             updateUiState { copy(isLoading = false) }
         }.onSuccess { details ->
+            println("ONSUCCESS -> ${details}")
             handleShoppingListDetailsSuccess(
                 listId = listId,
                 details = details,
