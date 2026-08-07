@@ -71,7 +71,7 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
                 ),
             )
 
-            check(createdListId == ZERO_LONG) {
+            check(createdListId > ZERO) {
                 "${R.string.shopping_list_data_source_list_not_found}: ${shoppingList.id}"
             }
 
@@ -221,7 +221,6 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
 
     private companion object {
         const val ZERO = 0
-        const val ZERO_LONG = 0L
         const val ONE = 1
     }
 }

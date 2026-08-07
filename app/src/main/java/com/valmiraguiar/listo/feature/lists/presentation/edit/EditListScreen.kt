@@ -132,21 +132,6 @@ fun EditListScreen(
                 }
             }
 
-            uiState.shoppingList?.products?.isEmpty() == true -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 24.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.edit_list_empty),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-
             else -> {
                 EditListContent(
                     uiState = uiState,

@@ -49,18 +49,28 @@ class EditListViewModel @Inject constructor(
             is EditListUiAction.ItemCategoryChange -> updateItem(action.itemId) { item ->
                 item.copy(category = action.categoryEnum)
             }
+
             is EditListUiAction.ItemDescriptionChange -> updateItem(action.itemId) { item ->
                 item.copy(description = action.description)
             }
+
             is EditListUiAction.ItemQuantityChange -> updateItem(action.itemId) { item ->
                 item.copy(quantity = action.quantity)
             }
+
             is EditListUiAction.RemoveItemClick -> removeItem(action.itemId)
             is EditListUiAction.SaveListClick -> saveList()
         }
     }
 
-    private fun initialUiState(): EditListUiState = EditListUiState()
+    private fun initialUiState(): EditListUiState = EditListUiState(
+        shoppingList = ShoppingList(
+            products = listOf(newItem()),
+            title = "",
+            createdAt = 0L,
+            id = 0L
+        )
+    )
 
     private fun openList(listId: Long?) {
         observeListJob?.cancel()
@@ -179,9 +189,11 @@ class EditListViewModel @Inject constructor(
             runCatching {
                 currentState.editingListId?.let {
                     updateShoppingListUseCase(
-                        shoppingList = currentState.shoppingList,
+                        shoppingList = formatToSaveList(currentState.shoppingList),
                     )
-                } ?: createShoppingListUseCase(currentState.shoppingList)
+                } ?: createShoppingListUseCase(
+                    formatToSaveList(currentState.shoppingList)
+                )
             }.onSuccess {
                 observeListJob?.cancel()
                 _uiResult.emit(EditListUiResult.OnListSaved)
@@ -208,6 +220,16 @@ class EditListViewModel @Inject constructor(
             quantity = "",
             unit = UnitEnum.Unit,
             category = CategoryEnum.Grocery,
+        )
+    }
+
+    private fun formatToSaveList(shoppingList: ShoppingList): ShoppingList {
+        val filteredProductList = shoppingList.products.filter {
+            it.description.isNotEmpty()
+        }
+
+        return shoppingList.copy(
+            products = filteredProductList
         )
     }
 
