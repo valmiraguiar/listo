@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.common.extensions.onError
 import com.valmiraguiar.listo.feature.common.extensions.onSuccess
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
+import com.valmiraguiar.listo.feature.lists.domain.usecase.DeleteShoppingListUseCase
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListsUseCase
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ShoppingListsViewModel @Inject constructor(
     private val observeShoppingListsUseCase: ObserveShoppingListsUseCase,
+    private val deleteShoppingListUseCase: DeleteShoppingListUseCase,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ShoppingListsUiState> by lazy {
@@ -45,16 +47,27 @@ class ShoppingListsViewModel @Inject constructor(
     fun dispatch(action: ShoppingListsUiAction) {
         when (action) {
             is ShoppingListsUiAction.FetchLists -> fetchShoppingLists()
-
             is ShoppingListsUiAction.BackClick -> emitUiResult(ShoppingListUiResult.OnNavigateBack)
-
             is ShoppingListsUiAction.ItemListClick -> emitUiResult(
                 ShoppingListUiResult.OnDetailListNavigate(
                     action.cardId
                 )
             )
-
+            is ShoppingListsUiAction.DeleteListClick -> deleteShoppingList(action.listId)
             is ShoppingListsUiAction.NewListClick -> emitUiResult(ShoppingListUiResult.OnCreateListNavigate)
+        }
+    }
+
+    private fun deleteShoppingList(listId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                deleteShoppingListUseCase(listId)
+            }.onSuccess {
+                _uiResult.emit(ShoppingListUiResult.OnListDeleted)
+            }.onFailure { error ->
+                handleError(error)
+                _uiResult.emit(ShoppingListUiResult.OnError)
+            }
         }
     }
 

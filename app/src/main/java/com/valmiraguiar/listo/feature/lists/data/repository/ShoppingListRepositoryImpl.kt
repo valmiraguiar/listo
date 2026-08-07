@@ -24,4 +24,8 @@ class ShoppingListRepositoryImpl @Inject constructor(
     override suspend fun updateShoppingList(shoppingList: ShoppingList) {
         return shoppingListLocalDataSource.updateShoppingList(shoppingList)
     }
+
+    override suspend fun deleteShoppingList(listId: Long) {
+        shoppingListLocalDataSource.deleteShoppingList(listId)
+    }
 }

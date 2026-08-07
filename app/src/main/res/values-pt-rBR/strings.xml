@@ -25,6 +25,7 @@
     <string name="shopping_lists_title">Minhas listas</string>
     <string name="shopping_lists_empty">Nenhuma lista criada ainda.</string>
     <string name="shopping_lists_create">Criar nova lista</string>
+    <string name="shopping_lists_delete">Excluir</string>
     <string name="shopping_list_details_title">Detalhes da lista</string>
     <string name="shopping_list_details_edit">Editar</string>
     <string name="shopping_list_details_empty">Nenhum produto nesta lista.</string>
