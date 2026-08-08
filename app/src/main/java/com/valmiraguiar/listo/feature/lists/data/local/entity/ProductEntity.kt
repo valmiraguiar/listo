@@ -37,4 +37,6 @@ data class ProductEntity(
     val unit: UnitEnum,
     @ColumnInfo(name = "category_id")
     val category: CategoryEnum,
+    @ColumnInfo(name = "is_checked", defaultValue = "0")
+    val isChecked: Boolean = false,
 )

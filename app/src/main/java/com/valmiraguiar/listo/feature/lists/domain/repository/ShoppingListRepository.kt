@@ -8,5 +8,6 @@ interface ShoppingListRepository {
     suspend fun createShoppingList(shoppingList: ShoppingList)
     fun observeShoppingListDetails(listId: Long): Flow<ShoppingList?>
     suspend fun updateShoppingList(shoppingList: ShoppingList)
+    suspend fun updateProductsCheckedState(shoppingListId: Long, checkedProductIds: Set<Long>)
     suspend fun deleteShoppingList(listId: Long)
 }

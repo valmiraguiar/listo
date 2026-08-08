@@ -13,6 +13,7 @@ interface ShoppingListLocalDataSource {
     suspend fun createShoppingList(shoppingList: ShoppingList)
     suspend fun updateShoppingListTitle(shoppingListId: Long, title: String)
     suspend fun updateShoppingList(shoppingList: ShoppingList)
+    suspend fun updateProductsCheckedState(shoppingListId: Long, checkedProductIds: Set<Long>)
     suspend fun createProduct(shoppingListId: Long, product: Product): Long
     suspend fun updateProduct(shoppingListId: Long, product: Product)
     suspend fun deleteProduct(shoppingListId: Long, productId: Long)

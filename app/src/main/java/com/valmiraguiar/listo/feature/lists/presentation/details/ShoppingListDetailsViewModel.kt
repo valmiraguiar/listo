@@ -3,15 +3,18 @@ package com.valmiraguiar.listo.feature.lists.presentation.details
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.valmiraguiar.listo.core.di.ApplicationScope
 import com.valmiraguiar.listo.feature.common.extensions.onError
 import com.valmiraguiar.listo.feature.common.extensions.onSuccess
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListDetailsUseCase
+import com.valmiraguiar.listo.feature.lists.domain.usecase.UpdateProductsCheckedStateUseCase
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsItemUiState
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,8 +31,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ShoppingListDetailsViewModel @Inject constructor(
     private val observeShoppingListDetailsUseCase: ObserveShoppingListDetailsUseCase,
+    private val updateProductsCheckedStateUseCase: UpdateProductsCheckedStateUseCase,
+    @ApplicationScope private val applicationScope: CoroutineScope,
 ) : ViewModel() {
     private var observeDetailsJob: Job? = null
+    private var saveCheckedProductsJob: Job? = null
+    private var lastSavedCheckedProductIds: Set<Long> = emptySet()
 
     private val _uiState = MutableStateFlow(ShoppingListDetailsUiState())
     val uiState: StateFlow<ShoppingListDetailsUiState> = _uiState.asStateFlow()
@@ -52,6 +59,8 @@ class ShoppingListDetailsViewModel @Inject constructor(
             is ShoppingListDetailsUiAction.BackClick -> emitUiResult(
                 ShoppingListDetailsUiResult.OnNavigateBack
             )
+
+            is ShoppingListDetailsUiAction.SaveCheckedProducts -> saveCheckedProducts()
         }
     }
 
@@ -97,24 +106,30 @@ class ShoppingListDetailsViewModel @Inject constructor(
         }
 
         val checkedItems = uiState.value.items.associate { item -> item.id to item.isChecked }
+        val items = shoppingList.products.map { product ->
+            ShoppingListDetailsItemUiState(
+                id = product.id,
+                title = product.description,
+                classification = product.category.name,
+                quantity = product.quantity,
+                unit = product.unit,
+                isChecked = checkedItems[product.id] ?: product.isChecked,
+            )
+        }.sortedBy { item -> item.isChecked }
+
         updateUiState {
             copy(
                 isLoading = false,
                 listId = shoppingList.id,
                 title = shoppingList.title,
-                items = shoppingList.products.map { product ->
-                    ShoppingListDetailsItemUiState(
-                        id = product.id,
-                        title = product.description,
-                        classification = product.category.name,
-                        quantity = product.quantity,
-                        unit = product.unit,
-                        isChecked = checkedItems[product.id] ?: false,
-                    )
-                }.sortedBy { item -> item.isChecked },
+                items = items,
                 isNotFound = false,
             )
         }
+        lastSavedCheckedProductIds = shoppingList.products
+            .filter { product -> product.isChecked }
+            .map { product -> product.id }
+            .toSet()
         emitUiResult(ShoppingListDetailsUiResult.OnShowListDetails)
     }
 
@@ -133,6 +148,33 @@ class ShoppingListDetailsViewModel @Inject constructor(
                 }.sortedBy { item -> item.isChecked },
             )
         }
+        saveCheckedProducts()
+    }
+
+    private fun saveCheckedProducts() {
+        val currentState = uiState.value
+        if (
+            currentState.listId <= ZERO ||
+            currentState.isLoading ||
+            currentState.isNotFound
+        ) return
+
+        val checkedProductIds = currentState.items.checkedProductIds()
+        if (checkedProductIds == lastSavedCheckedProductIds) return
+
+        saveCheckedProductsJob?.cancel()
+        saveCheckedProductsJob = applicationScope.launch {
+            runCatching {
+                updateProductsCheckedStateUseCase(
+                    shoppingListId = currentState.listId,
+                    checkedProductIds = checkedProductIds,
+                )
+            }.onSuccess {
+                lastSavedCheckedProductIds = checkedProductIds
+            }.onFailure { error ->
+                Log.e("app-error-log", error.toString())
+            }
+        }
     }
 
     private fun handleError(error: Throwable) {
@@ -149,5 +191,15 @@ class ShoppingListDetailsViewModel @Inject constructor(
         reduce: ShoppingListDetailsUiState.() -> ShoppingListDetailsUiState,
     ) {
         _uiState.value = uiState.value.reduce()
+    }
+
+    private fun List<ShoppingListDetailsItemUiState>.checkedProductIds(): Set<Long> {
+        return filter { item -> item.isChecked }
+            .map { item -> item.id }
+            .toSet()
+    }
+
+    private companion object {
+        const val ZERO = 0
     }
 }

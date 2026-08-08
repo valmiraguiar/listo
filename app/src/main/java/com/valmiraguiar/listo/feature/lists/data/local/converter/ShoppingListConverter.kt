@@ -23,7 +23,8 @@ fun ProductEntity.toDomain(): Product {
         description = this.description,
         quantity = this.quantity,
         unit = this.unit,
-        category = this.category
+        category = this.category,
+        isChecked = this.isChecked,
     )
 }
 
@@ -42,6 +43,7 @@ fun Product.toEntity(shoppingListId: Long): ProductEntity {
         description = this.description,
         category = this.category,
         unit = this.unit,
-        quantity = this.quantity
+        quantity = this.quantity,
+        isChecked = this.isChecked,
     )
 }

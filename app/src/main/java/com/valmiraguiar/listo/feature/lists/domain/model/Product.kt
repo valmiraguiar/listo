@@ -6,4 +6,5 @@ data class Product (
     val quantity: String,
     val unit: UnitEnum,
     val category: CategoryEnum,
+    val isChecked: Boolean = false,
 )

@@ -69,4 +69,25 @@ interface ProductDao {
     suspend fun deleteByShoppingListId(
         shoppingListId: Long
     ): Int
+
+    @Query(
+        """
+            UPDATE products SET is_checked = 0 WHERE shopping_list_id = :shoppingListId
+        """
+    )
+    suspend fun uncheckByShoppingListId(
+        shoppingListId: Long
+    ): Int
+
+    @Query(
+        """
+            UPDATE products
+            SET is_checked = 1
+            WHERE shopping_list_id = :shoppingListId AND product_id IN (:productIds)
+        """
+    )
+    suspend fun checkByIds(
+        shoppingListId: Long,
+        productIds: List<Long>
+    ): Int
 }

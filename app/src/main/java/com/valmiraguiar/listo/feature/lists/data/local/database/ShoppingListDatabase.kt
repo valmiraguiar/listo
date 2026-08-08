@@ -13,7 +13,7 @@ import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListEntity
         ShoppingListEntity::class,
         ProductEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters

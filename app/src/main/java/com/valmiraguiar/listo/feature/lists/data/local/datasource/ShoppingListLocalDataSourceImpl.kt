@@ -83,6 +83,7 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
                         quantity = product.quantity,
                         unit = product.unit,
                         category = product.category,
+                        isChecked = product.isChecked,
                     )
                 )
             }
@@ -138,6 +139,28 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
                             shoppingListId = shoppingList.id,
                         )
                     },
+                )
+            }
+        }
+    }
+
+    override suspend fun updateProductsCheckedState(
+        shoppingListId: Long,
+        checkedProductIds: Set<Long>,
+    ) {
+        require(shoppingListId > ZERO) {
+            R.string.shopping_list_data_source_invalid_id
+        }
+
+        database.withTransaction {
+            productDao.uncheckByShoppingListId(
+                shoppingListId = shoppingListId,
+            )
+
+            if (checkedProductIds.isNotEmpty()) {
+                productDao.checkByIds(
+                    shoppingListId = shoppingListId,
+                    productIds = checkedProductIds.toList(),
                 )
             }
         }

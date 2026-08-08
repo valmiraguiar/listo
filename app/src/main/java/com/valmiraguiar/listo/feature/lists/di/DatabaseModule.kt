@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.valmiraguiar.listo.feature.lists.data.local.dao.ProductDao
 import com.valmiraguiar.listo.feature.lists.data.local.dao.ShoppingListDao
 import com.valmiraguiar.listo.feature.lists.data.local.database.ShoppingListDatabase
+import com.valmiraguiar.listo.feature.lists.data.local.database.ShoppingListDatabaseMigrations
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +26,8 @@ object DatabaseModule {
             context,
             ShoppingListDatabase::class.java,
             DATABASE_NAME
+        ).addMigrations(
+            ShoppingListDatabaseMigrations.MIGRATION_1_2,
         ).build()
     }
 

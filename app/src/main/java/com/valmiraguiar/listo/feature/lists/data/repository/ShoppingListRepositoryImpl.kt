@@ -25,6 +25,16 @@ class ShoppingListRepositoryImpl @Inject constructor(
         return shoppingListLocalDataSource.updateShoppingList(shoppingList)
     }
 
+    override suspend fun updateProductsCheckedState(
+        shoppingListId: Long,
+        checkedProductIds: Set<Long>,
+    ) {
+        shoppingListLocalDataSource.updateProductsCheckedState(
+            shoppingListId = shoppingListId,
+            checkedProductIds = checkedProductIds,
+        )
+    }
+
     override suspend fun deleteShoppingList(listId: Long) {
         shoppingListLocalDataSource.deleteShoppingList(listId)
     }

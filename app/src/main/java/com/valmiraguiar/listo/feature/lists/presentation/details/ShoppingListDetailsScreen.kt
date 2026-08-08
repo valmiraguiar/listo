@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
@@ -53,6 +56,16 @@ fun ShoppingListDetailsRoute(
     viewModel: ShoppingListDetailsViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+        viewModel.dispatch(ShoppingListDetailsUiAction.SaveCheckedProducts)
+    }
+
+    DisposableEffect(viewModel) {
+        onDispose {
+            viewModel.dispatch(ShoppingListDetailsUiAction.SaveCheckedProducts)
+        }
+    }
 
     LaunchedEffect(viewModel.uiResult) {
         viewModel.uiResult.collect { result ->
