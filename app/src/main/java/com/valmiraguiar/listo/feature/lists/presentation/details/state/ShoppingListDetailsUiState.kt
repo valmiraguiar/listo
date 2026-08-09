@@ -1,5 +1,6 @@
 package com.valmiraguiar.listo.feature.lists.presentation.details.state
 
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
 
 data class ShoppingListDetailsUiState(
@@ -13,7 +14,7 @@ data class ShoppingListDetailsUiState(
 data class ShoppingListDetailsItemUiState(
     val id: Long,
     val title: String,
-    val classification: String,
+    val category: CategoryEnum,
     val quantity: String = "",
     val unit: UnitEnum = UnitEnum.Unit,
     val isChecked: Boolean = false,

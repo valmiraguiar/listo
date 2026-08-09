@@ -110,7 +110,7 @@ class ShoppingListDetailsViewModel @Inject constructor(
             ShoppingListDetailsItemUiState(
                 id = product.id,
                 title = product.description,
-                classification = product.category.name,
+                category = product.category,
                 quantity = product.quantity,
                 unit = product.unit,
                 isChecked = checkedItems[product.id] ?: product.isChecked,

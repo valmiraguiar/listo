@@ -42,7 +42,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
+import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
+import com.valmiraguiar.listo.feature.lists.presentation.label
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsItemUiState
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiResult
@@ -291,9 +293,10 @@ private fun ShoppingListItem(
 
 @Composable
 private fun ShoppingListDetailsItemUiState.supportingText(): String {
-    if (quantity.isBlank()) return classification
+    val categoryLabel = category.label()
+    if (quantity.isBlank()) return categoryLabel
 
-    return "${quantity.trim()} ${unit.label()} - $classification"
+    return "${quantity.trim()} ${unit.label()} - $categoryLabel"
 }
 
 @Composable
@@ -329,19 +332,19 @@ private const val ITEM_PLACEMENT_ANIMATION_DURATION = 250
 private const val DIVIDER_ALPHA = 0.35f
 
 private val PREVIEW_ITEMS = listOf(
-    ShoppingListDetailsItemUiState(id = 1L, title = "Arroz", classification = "Mercearia"),
-    ShoppingListDetailsItemUiState(id = 2L, title = "Leite", classification = "Laticínios"),
-    ShoppingListDetailsItemUiState(id = 3L, title = "Maçã", classification = "Hortifruti"),
+    ShoppingListDetailsItemUiState(id = 1L, title = "Arroz", category = CategoryEnum.Grocery),
+    ShoppingListDetailsItemUiState(id = 2L, title = "Leite", category = CategoryEnum.Dairy),
+    ShoppingListDetailsItemUiState(id = 3L, title = "Suco", category = CategoryEnum.Beverages),
     ShoppingListDetailsItemUiState(
         id = 4L,
-        title = "Pão",
-        classification = "Padaria",
+        title = "Carne",
+        category = CategoryEnum.Meat,
         isChecked = true,
     ),
     ShoppingListDetailsItemUiState(
         id = 5L,
-        title = "Sabonete",
-        classification = "Higiene",
+        title = "Feijão",
+        category = CategoryEnum.Grocery,
         isChecked = true,
     ),
 )

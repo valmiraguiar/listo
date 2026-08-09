@@ -62,6 +62,7 @@ import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.Product
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
+import com.valmiraguiar.listo.feature.lists.presentation.label
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiState
@@ -418,7 +419,7 @@ private fun CategoryDropdown(
         modifier = modifier,
     ) {
         UnderlinedTextField(
-            value = selected.name,
+            value = selected.label(),
             onValueChange = {},
             label = stringResource(id = R.string.create_list_category_label),
             readOnly = true,
@@ -440,7 +441,7 @@ private fun CategoryDropdown(
             CategoryEnum.entries.forEach { category ->
                 DropdownMenuItem(
                     text = {
-                        Text(text = category.name)
+                        Text(text = category.label())
                     },
                     onClick = {
                         onCategorySelected(category)
