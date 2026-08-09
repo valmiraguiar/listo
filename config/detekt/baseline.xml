@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>TooManyFunctions:EditListViewModel.kt$EditListViewModel : ViewModel</ID>
+    <ID>TooManyFunctions:ShoppingListLocalDataSource.kt$ShoppingListLocalDataSource</ID>
+    <ID>TooManyFunctions:ShoppingListLocalDataSourceImpl.kt$ShoppingListLocalDataSourceImpl : ShoppingListLocalDataSource</ID>
+  </CurrentIssues>
+</SmellBaseline>

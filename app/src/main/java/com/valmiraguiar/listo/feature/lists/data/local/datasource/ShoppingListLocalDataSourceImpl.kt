@@ -109,7 +109,6 @@ class ShoppingListLocalDataSourceImpl @Inject constructor(
         }
     }
 
-
     override suspend fun updateShoppingList(shoppingList: ShoppingList) {
         require(shoppingList.id > ZERO) {
             R.string.shopping_list_data_source_invalid_id

@@ -180,8 +180,9 @@ class EditListViewModel @Inject constructor(
         val currentState = _uiState.value
         if (!currentState.canSave) return
 
-        if (currentState.shoppingList == null)
+        if (currentState.shoppingList == null) {
             return
+        }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true) }

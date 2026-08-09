@@ -157,7 +157,9 @@ class ShoppingListDetailsViewModel @Inject constructor(
             currentState.listId <= ZERO ||
             currentState.isLoading ||
             currentState.isNotFound
-        ) return
+        ) {
+            return
+        }
 
         val checkedProductIds = currentState.items.checkedProductIds()
         if (checkedProductIds == lastSavedCheckedProductIds) return

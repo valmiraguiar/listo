@@ -44,11 +44,11 @@ import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
-import com.valmiraguiar.listo.feature.lists.presentation.label
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsItemUiState
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.details.state.ShoppingListDetailsUiState
+import com.valmiraguiar.listo.feature.lists.presentation.label
 
 @Composable
 fun ShoppingListDetailsRoute(

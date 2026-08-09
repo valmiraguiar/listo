@@ -335,10 +335,10 @@ private fun SwipeToDeleteShoppingListItem(
                     orientation = Orientation.Horizontal,
                     onDragStopped = { velocity ->
                         val shouldReveal = velocity > DELETE_REVEAL_FLING_VELOCITY ||
-                                (
-                                        velocity > -DELETE_REVEAL_FLING_VELOCITY &&
-                                                offsetX > deleteActionWidthPx * DELETE_REVEAL_THRESHOLD
-                                        )
+                            (
+                                velocity > -DELETE_REVEAL_FLING_VELOCITY &&
+                                    offsetX > deleteActionWidthPx * DELETE_REVEAL_THRESHOLD
+                                )
                         animateOffsetTo(
                             if (shouldReveal) {
                                 deleteActionWidthPx

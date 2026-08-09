@@ -62,10 +62,10 @@ import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.Product
 import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
-import com.valmiraguiar.listo.feature.lists.presentation.label
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.edit.state.EditListUiState
+import com.valmiraguiar.listo.feature.lists.presentation.label
 
 private const val ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS = 300
 private const val SCROLL_ANIMATION_DURATION_MILLIS = 450
@@ -199,55 +199,56 @@ private fun EditListContent(
             )
         }
 
-        if(uiState.shoppingList?.products != null)
-        items(
-            items = uiState.shoppingList.products,
-            key = { item -> item.id },
-            contentType = { "edit_list_item" },
-        ) { item ->
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateItem(
-                        placementSpec = tween(
-                            durationMillis = ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS,
-                        ),
+        if (uiState.shoppingList?.products != null) {
+            items(
+                items = uiState.shoppingList.products,
+                key = { item -> item.id },
+                contentType = { "edit_list_item" },
+            ) { item ->
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(
+                            placementSpec = tween(
+                                durationMillis = ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS,
+                            ),
+                        )
+                        .background(color = MaterialTheme.colorScheme.surface),
+                ) {
+                    EditListItem(
+                        item = item,
+                        requestDescriptionFocus = item.id == focusedItemId,
+                        onDescriptionChange = { description ->
+                            onUiEvent(
+                                EditListUiAction.ItemDescriptionChange(
+                                    itemId = item.id,
+                                    description = description,
+                                ),
+                            )
+                        },
+                        onQuantityChange = { quantity ->
+                            onUiEvent(
+                                EditListUiAction.ItemQuantityChange(
+                                    itemId = item.id,
+                                    quantity = quantity,
+                                ),
+                            )
+                        },
+                        onCategorySelected = { category ->
+                            onUiEvent(
+                                EditListUiAction.ItemCategoryChange(
+                                    itemId = item.id,
+                                    categoryEnum = category,
+                                ),
+                            )
+                        },
+                        onRemoveItem = {
+                            onUiEvent(EditListUiAction.RemoveItemClick(itemId = item.id))
+                        },
+                        onDescriptionFocused = onItemFocused,
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                    .background(color = MaterialTheme.colorScheme.surface),
-            ) {
-                EditListItem(
-                    item = item,
-                    requestDescriptionFocus = item.id == focusedItemId,
-                    onDescriptionChange = { description ->
-                        onUiEvent(
-                            EditListUiAction.ItemDescriptionChange(
-                                itemId = item.id,
-                                description = description,
-                            ),
-                        )
-                    },
-                    onQuantityChange = { quantity ->
-                        onUiEvent(
-                            EditListUiAction.ItemQuantityChange(
-                                itemId = item.id,
-                                quantity = quantity,
-                            ),
-                        )
-                    },
-                    onCategorySelected = { category ->
-                        onUiEvent(
-                            EditListUiAction.ItemCategoryChange(
-                                itemId = item.id,
-                                categoryEnum = category,
-                            ),
-                        )
-                    },
-                    onRemoveItem = {
-                        onUiEvent(EditListUiAction.RemoveItemClick(itemId = item.id))
-                    },
-                    onDescriptionFocused = onItemFocused,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                }
             }
         }
     }
@@ -460,27 +461,27 @@ private fun EditListScreenPreview() {
         EditListScreen(
             uiState = EditListUiState(
                 shoppingList =
-                    ShoppingList(
-                        id = 1L,
-                        title = "Lista1",
-                        products = listOf(
-                            Product(
-                                id = 1L,
-                                description = "Arroz",
-                                quantity = "2",
-                                category = CategoryEnum.Grocery,
-                                unit = UnitEnum.Unit,
-                            ),
-                            Product(
-                                id = 2L,
-                                description = "Leite",
-                                quantity = "1",
-                                category = CategoryEnum.Dairy,
-                                unit = UnitEnum.Unit,
-                            ),
+                ShoppingList(
+                    id = 1L,
+                    title = "Lista1",
+                    products = listOf(
+                        Product(
+                            id = 1L,
+                            description = "Arroz",
+                            quantity = "2",
+                            category = CategoryEnum.Grocery,
+                            unit = UnitEnum.Unit,
                         ),
-                        createdAt = 1786048252969L
-                    )
+                        Product(
+                            id = 2L,
+                            description = "Leite",
+                            quantity = "1",
+                            category = CategoryEnum.Dairy,
+                            unit = UnitEnum.Unit,
+                        ),
+                    ),
+                    createdAt = 1786048252969L
+                )
             ),
             onUiEvent = {},
         )
