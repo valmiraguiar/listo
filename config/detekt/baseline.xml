@@ -5,5 +5,6 @@
     <ID>TooManyFunctions:EditListViewModel.kt$EditListViewModel : ViewModel</ID>
     <ID>TooManyFunctions:ShoppingListLocalDataSource.kt$ShoppingListLocalDataSource</ID>
     <ID>TooManyFunctions:ShoppingListLocalDataSourceImpl.kt$ShoppingListLocalDataSourceImpl : ShoppingListLocalDataSource</ID>
+    <ID>TooManyFunctions:ShoppingListsScreen.kt$com.valmiraguiar.listo.feature.lists.presentation.list.ShoppingListsScreen.kt</ID>
   </CurrentIssues>
 </SmellBaseline>

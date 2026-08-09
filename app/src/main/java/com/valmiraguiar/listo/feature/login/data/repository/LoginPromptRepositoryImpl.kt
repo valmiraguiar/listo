@@ -1,10 +1,10 @@
 package com.valmiraguiar.listo.feature.login.data.repository
 
 import android.content.Context
+import androidx.core.content.edit
 import com.valmiraguiar.listo.feature.login.domain.repository.LoginPromptRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import androidx.core.content.edit
 
 class LoginPromptRepositoryImpl @Inject constructor(
     @ApplicationContext context: Context,
