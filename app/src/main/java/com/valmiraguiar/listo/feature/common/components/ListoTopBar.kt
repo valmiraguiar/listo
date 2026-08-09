@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,8 @@ import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 fun ListoTopBar(
     showBackButton: Boolean,
     onBackClick: () -> Unit,
+    showAccountButton: Boolean = false,
+    onAccountClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -82,6 +85,23 @@ fun ListoTopBar(
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.primary,
             )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            AnimatedVisibility(
+                visible = showAccountButton,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                IconButton(onClick = onAccountClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.AccountBox,
+                        contentDescription = stringResource(id = R.string.action_login),
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(28.dp),
+                    )
+                }
+            }
         }
     }
 }
@@ -96,7 +116,9 @@ private fun ListoTopBarPreview() {
     ListoTheme {
         ListoTopBar(
             showBackButton = true,
-            onBackClick = {}
+            onBackClick = {},
+            showAccountButton = true,
+            onAccountClick = {},
         )
     }
 }

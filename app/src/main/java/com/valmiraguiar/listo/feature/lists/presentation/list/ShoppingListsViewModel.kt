@@ -11,6 +11,8 @@ import com.valmiraguiar.listo.feature.lists.domain.usecase.ObserveShoppingListsU
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListUiResult
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiAction
 import com.valmiraguiar.listo.feature.lists.presentation.list.state.ShoppingListsUiState
+import com.valmiraguiar.listo.feature.login.domain.usecase.MarkLoginPromptAsShownUseCase
+import com.valmiraguiar.listo.feature.login.domain.usecase.ShouldShowLoginPromptUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,11 +29,14 @@ import javax.inject.Inject
 class ShoppingListsViewModel @Inject constructor(
     private val observeShoppingListsUseCase: ObserveShoppingListsUseCase,
     private val deleteShoppingListUseCase: DeleteShoppingListUseCase,
+    private val shouldShowLoginPromptUseCase: ShouldShowLoginPromptUseCase,
+    private val markLoginPromptAsShownUseCase: MarkLoginPromptAsShownUseCase,
 ) : ViewModel() {
-
     private val _uiState: MutableStateFlow<ShoppingListsUiState> by lazy {
         MutableStateFlow(
-            ShoppingListsUiState()
+            ShoppingListsUiState(
+                showLoginPrompt = shouldShowLoginPromptUseCase(),
+            )
         )
     }
     val uiState: StateFlow<ShoppingListsUiState> get() = _uiState
@@ -55,6 +60,8 @@ class ShoppingListsViewModel @Inject constructor(
             )
             is ShoppingListsUiAction.DeleteListClick -> deleteShoppingList(action.listId)
             is ShoppingListsUiAction.NewListClick -> emitUiResult(ShoppingListUiResult.OnCreateListNavigate)
+            is ShoppingListsUiAction.LoginPromptDismiss -> dismissLoginPrompt()
+            is ShoppingListsUiAction.LoginPromptLoginClick -> navigateToLogin()
         }
     }
 
@@ -100,5 +107,16 @@ class ShoppingListsViewModel @Inject constructor(
 
     private fun updateUiState(reduce: ShoppingListsUiState.() -> ShoppingListsUiState) {
         _uiState.value = uiState.value.reduce()
+    }
+
+    private fun navigateToLogin() {
+        dismissLoginPrompt()
+        emitUiResult(ShoppingListUiResult.OnLoginNavigate)
+    }
+
+    private fun dismissLoginPrompt() {
+        markLoginPromptAsShownUseCase()
+
+        updateUiState { copy(showLoginPrompt = false) }
     }
 }

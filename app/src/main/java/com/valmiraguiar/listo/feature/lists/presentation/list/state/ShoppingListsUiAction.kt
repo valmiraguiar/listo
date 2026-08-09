@@ -6,4 +6,6 @@ sealed interface ShoppingListsUiAction {
     data class DeleteListClick(val listId: Long) : ShoppingListsUiAction
     data object BackClick : ShoppingListsUiAction
     data object NewListClick : ShoppingListsUiAction
+    data object LoginPromptDismiss : ShoppingListsUiAction
+    data object LoginPromptLoginClick : ShoppingListsUiAction
 }

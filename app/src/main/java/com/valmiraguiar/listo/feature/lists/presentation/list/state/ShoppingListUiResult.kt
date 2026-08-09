@@ -8,5 +8,6 @@ sealed interface ShoppingListUiResult {
     data object OnListDeleted : ShoppingListUiResult
     data object OnCreateListNavigate : ShoppingListUiResult
     data class OnDetailListNavigate(val listId: Long) : ShoppingListUiResult
+    data object OnLoginNavigate : ShoppingListUiResult
     data object OnNavigateBack : ShoppingListUiResult
 }

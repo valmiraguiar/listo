@@ -32,6 +32,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -85,6 +86,7 @@ private val deleteActionWidth = DELETE_ACTION_WIDTH_DP.dp
 fun ShoppingListsRoute(
     onShoppingListClickNavigate: (Long) -> Unit,
     onCreateListClickNavigate: () -> Unit,
+    onLoginClickNavigate: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ShoppingListsViewModel,
 ) {
@@ -95,6 +97,7 @@ fun ShoppingListsRoute(
             when (result) {
                 is ShoppingListUiResult.OnCreateListNavigate -> onCreateListClickNavigate()
                 is ShoppingListUiResult.OnDetailListNavigate -> onShoppingListClickNavigate(result.listId)
+                is ShoppingListUiResult.OnLoginNavigate -> onLoginClickNavigate()
                 is ShoppingListUiResult.OnError -> Unit // TODO - Not implemented yet
                 is ShoppingListUiResult.OnListDeleted -> Unit // TODO - Not implemented yet
                 is ShoppingListUiResult.OnLoading -> Unit // TODO - Not implemented yet
@@ -177,7 +180,41 @@ fun ShoppingListsScreen(
                     .padding(16.dp),
             )
         }
+
+        if (uiState.showLoginPrompt) {
+            LoginPromptDialog(
+                onDismiss = {
+                    onUiEvent(ShoppingListsUiAction.LoginPromptDismiss)
+                },
+                onLoginClick = {
+                    onUiEvent(ShoppingListsUiAction.LoginPromptLoginClick)
+                },
+            )
+        }
     }
+}
+
+@Composable
+private fun LoginPromptDialog(
+    onDismiss: () -> Unit,
+    onLoginClick: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        text = {
+            Text(text = stringResource(id = R.string.login_prompt_message))
+        },
+        confirmButton = {
+            ExtendedFloatingActionButton(
+                onClick = dropUnlessResumed(block = onLoginClick),
+                icon = {},
+                text = {
+                    Text(text = stringResource(id = R.string.login_prompt_action))
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+    )
 }
 
 @Composable
@@ -479,6 +516,17 @@ private fun EmptyShoppingListsScreenPreview() {
         ShoppingListsScreen(
             uiState = ShoppingListsUiState(isLoading = false),
             onUiEvent = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoginPromptDialogPreview() {
+    ListoTheme {
+        LoginPromptDialog(
+            onDismiss = {},
+            onLoginClick = {},
         )
     }
 }

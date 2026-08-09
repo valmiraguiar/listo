@@ -19,6 +19,8 @@ import com.valmiraguiar.listo.core.navigation.ListoNavigator
 import com.valmiraguiar.listo.feature.common.components.ListoTopBar
 import com.valmiraguiar.listo.feature.lists.navigation.ShoppingListsKey
 import com.valmiraguiar.listo.feature.lists.navigation.listsEntry
+import com.valmiraguiar.listo.feature.login.navigation.loginEntry
+import com.valmiraguiar.listo.feature.login.navigation.navigateToLogin
 import com.valmiraguiar.listo.feature.splash.navigation.splashEntry
 
 @Composable
@@ -37,13 +39,16 @@ fun ListoApp(
             ListoTopBar(
                 showBackButton = appState.navigationState.currentKey != ShoppingListsKey &&
                     appState.navigationState.currentKey != appState.navigationState.startRoute,
-                onBackClick = navigator::navigateBack
+                onBackClick = navigator::navigateBack,
+                showAccountButton = appState.navigationState.currentKey == ShoppingListsKey,
+                onAccountClick = navigator::navigateToLogin,
             )
         }
     ) { contentPadding ->
         val entryProvider = entryProvider {
             splashEntry(navigator)
             listsEntry(navigator)
+            loginEntry()
         }
 
         Box(

@@ -7,12 +7,14 @@ import com.valmiraguiar.listo.core.navigation.ListoNavigator
 import com.valmiraguiar.listo.feature.lists.presentation.details.ShoppingListDetailsRoute
 import com.valmiraguiar.listo.feature.lists.presentation.edit.EditListRoute
 import com.valmiraguiar.listo.feature.lists.presentation.list.ShoppingListsRoute
+import com.valmiraguiar.listo.feature.login.navigation.navigateToLogin
 
 fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
     entry<ShoppingListsKey> {
         ShoppingListsRoute(
             onShoppingListClickNavigate = navigator::navigateToListDetails,
             onCreateListClickNavigate = { navigator.navigateToEditList() },
+            onLoginClickNavigate = navigator::navigateToLogin,
             viewModel = hiltViewModel()
         )
     }

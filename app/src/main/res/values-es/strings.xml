@@ -4,6 +4,7 @@
     <string name="splash_subtitle">Base lista con Navigation 3, Hilt y una pila tipada.</string>
     <string name="action_continue">Entrar</string>
     <string name="action_back">Volver</string>
+    <string name="action_login">Iniciar sesión</string>
     <string name="home_title">Arquitectura lista para escalar</string>
     <string name="home_subtitle">Las rutas son tipadas, la UI navega por contratos y cada destino puede tener su propio ViewModel.</string>
     <string name="create_list_topbar_title">Crear lista</string>
@@ -30,6 +31,9 @@
     <string name="shopping_list_details_edit">Editar</string>
     <string name="shopping_list_details_empty">No hay productos en esta lista.</string>
     <string name="shopping_list_details_not_found">No se encontró ninguna lista para el id %1$d.</string>
+    <string name="login_prompt_message">Inicia sesión y mantén tus listas guardadas en la nube.</string>
+    <string name="login_prompt_action">Iniciar sesión</string>
+    <string name="login_screen_title">Login screen</string>
     <string name="category_beverages">Bebidas</string>
     <string name="category_grocery">Mercado</string>
     <string name="category_dairy">Fiambres</string>
