@@ -56,7 +56,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.valmiraguiar.listo.R
 import com.valmiraguiar.listo.feature.common.components.UnderlinedTextField
-import com.valmiraguiar.listo.feature.common.theme.BackgroundVariant
 import com.valmiraguiar.listo.feature.common.theme.ListoTheme
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
 import com.valmiraguiar.listo.feature.lists.domain.model.Product
@@ -121,7 +120,7 @@ fun EditListScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = BackgroundVariant),
+            .background(color = MaterialTheme.colorScheme.background),
     ) {
         when {
             uiState.isLoading -> {
@@ -206,14 +205,15 @@ private fun EditListContent(
                 contentType = { "edit_list_item" },
             ) { item ->
                 Surface(
+                    color = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .fillMaxWidth()
                         .animateItem(
                             placementSpec = tween(
                                 durationMillis = ITEM_PLACEMENT_ANIMATION_DURATION_MILLIS,
                             ),
-                        )
-                        .background(color = MaterialTheme.colorScheme.surface),
+                        ),
                 ) {
                     EditListItem(
                         item = item,
@@ -438,6 +438,7 @@ private fun CategoryDropdown(
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            containerColor = MaterialTheme.colorScheme.surface,
         ) {
             CategoryEnum.entries.forEach { category ->
                 DropdownMenuItem(
