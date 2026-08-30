@@ -1,137 +1,80 @@
 package com.valmiraguiar.listo.feature.lists.data.local.datasource
 
+import com.valmiraguiar.listo.feature.lists.data.local.dao.ProductDao
+import com.valmiraguiar.listo.feature.lists.data.local.dao.ShoppingListDao
+import com.valmiraguiar.listo.feature.lists.data.local.database.ShoppingListDatabase
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ProductEntity
 import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListEntity
+import com.valmiraguiar.listo.feature.lists.data.local.entity.ShoppingListWithProducts
 import com.valmiraguiar.listo.feature.lists.domain.model.CategoryEnum
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraft
-import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingListDraftItem
+import com.valmiraguiar.listo.feature.lists.domain.model.Product
+import com.valmiraguiar.listo.feature.lists.domain.model.ShoppingList
 import com.valmiraguiar.listo.feature.lists.domain.model.UnitEnum
-import io.mockk.coEvery
-import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ShoppingListLocalDataSourceImplTest {
 
+    private val database = mockk<ShoppingListDatabase>()
     private val shoppingListDao = mockk<ShoppingListDao>()
-    private val localDataSource = ShoppingListLocalDataSourceImpl(shoppingListDao)
+    private val productDao = mockk<ProductDao>()
+    private val localDataSource = ShoppingListLocalDataSourceImpl(
+        database = database,
+        shoppingListDao = shoppingListDao,
+        productDao = productDao,
+    )
 
     @Test
-    fun `createShoppingList maps draft into local entities before persisting`() = runTest {
-        val listSlot = slot<ShoppingListEntity>()
-        val itemsSlot = slot<List<ProductEntity>>()
-        val draft = ShoppingListDraft(
-            title = "Feira do mes",
-            items = listOf(
-                ShoppingListDraftItem(
-                    quantity = "2",
-                    unit = UnitEnum.Kilogram,
-                    description = "Tomate",
-                    categoryEnum = CategoryEnum.Grocery,
-                ),
-                ShoppingListDraftItem(
-                    quantity = "1",
-                    unit = UnitEnum.Unit,
-                    description = "Leite",
-                    categoryEnum = CategoryEnum.Dairy,
+    fun `observeShoppingLists maps local entities to domain models`() = runTest {
+        every { shoppingListDao.observeAll() } returns flowOf(
+            listOf(
+                ShoppingListWithProducts(
+                    shoppingList = ShoppingListEntity(
+                        id = 15L,
+                        title = "Feira do mes",
+                        createdAt = 1_800L,
+                    ),
+                    products = listOf(
+                        ProductEntity(
+                            id = 30L,
+                            shoppingListId = 15L,
+                            description = "Tomate",
+                            quantity = "2",
+                            unit = UnitEnum.Kilogram,
+                            category = CategoryEnum.Grocery,
+                            isChecked = true,
+                        ),
+                    ),
                 ),
             ),
         )
-        coEvery {
-            shoppingListDao.insertShoppingListWithItems(
-                list = capture(listSlot),
-                items = capture(itemsSlot),
-            )
-        } returns 15L
 
-        val result = localDataSource.createShoppingList(draft)
+        val result = localDataSource.observeShoppingLists().first()
 
-        assertEquals(15L, result)
-        assertEquals("Feira do mes", listSlot.captured.title)
-        assertTrue(listSlot.captured.createdAt > 0L)
         assertEquals(
             listOf(
-                ProductEntity(
-                    productName = "Tomate",
-                    quantity = "2",
-                    unit = UnitEnum.Kilogram,
-                    categoryId = CategoryEnum.Grocery.id,
-                ),
-                ProductEntity(
-                    productName = "Leite",
-                    quantity = "1",
-                    unit = UnitEnum.Unit,
-                    categoryId = CategoryEnum.Dairy.id,
-                ),
-            ),
-            itemsSlot.captured,
-        )
-        coVerify(exactly = 1) {
-            shoppingListDao.insertShoppingListWithItems(any(), any())
-        }
-    }
-
-    @Test
-    fun `updateShoppingList maps draft into local entities before persisting changes`() = runTest {
-        val itemsSlot = slot<List<ProductEntity>>()
-        val draft = ShoppingListDraft(
-            title = "Feira atualizada",
-            items = listOf(
-                ShoppingListDraftItem(
-                    quantity = "3",
-                    unit = UnitEnum.Unit,
-                    description = "Banana",
-                    categoryEnum = CategoryEnum.Grocery,
-                ),
-                ShoppingListDraftItem(
-                    quantity = "2",
-                    unit = UnitEnum.Liter,
-                    description = "Leite",
-                    categoryEnum = CategoryEnum.Dairy,
+                ShoppingList(
+                    id = 15L,
+                    title = "Feira do mes",
+                    createdAt = 1_800L,
+                    products = listOf(
+                        Product(
+                            id = 30L,
+                            description = "Tomate",
+                            quantity = "2",
+                            unit = UnitEnum.Kilogram,
+                            category = CategoryEnum.Grocery,
+                            isChecked = true,
+                        ),
+                    ),
                 ),
             ),
+            result,
         )
-        coEvery {
-            shoppingListDao.updateShoppingListWithItems(
-                listId = 15L,
-                title = "Feira atualizada",
-                items = capture(itemsSlot),
-            )
-        } returns 15L
-
-        val result = localDataSource.updateShoppingList(
-            listId = 15L,
-            draft = draft,
-        )
-
-        assertEquals(15L, result)
-        assertEquals(
-            listOf(
-                ProductEntity(
-                    productName = "Banana",
-                    quantity = "3",
-                    unit = UnitEnum.Unit,
-                    categoryId = CategoryEnum.Grocery.id,
-                ),
-                ProductEntity(
-                    productName = "Leite",
-                    quantity = "2",
-                    unit = UnitEnum.Liter,
-                    categoryId = CategoryEnum.Dairy.id,
-                ),
-            ),
-            itemsSlot.captured,
-        )
-        coVerify(exactly = 1) {
-            shoppingListDao.updateShoppingListWithItems(
-                listId = 15L,
-                title = "Feira atualizada",
-                items = any(),
-            )
-        }
     }
 }

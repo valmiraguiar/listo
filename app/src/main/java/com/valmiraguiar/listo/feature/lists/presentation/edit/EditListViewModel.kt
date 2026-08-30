@@ -31,7 +31,7 @@ class EditListViewModel @Inject constructor(
     private val observeShoppingListDetailsUseCase: ObserveShoppingListDetailsUseCase,
     private val updateShoppingListUseCase: UpdateShoppingListUseCase,
 ) : ViewModel() {
-    private var nextItemId = FIRST_ITEM_ID
+    private var nextTemporaryItemId = FIRST_TEMPORARY_ITEM_ID
     private var observeListJob: Job? = null
 
     private val _uiState = MutableStateFlow(initialUiState())
@@ -74,9 +74,9 @@ class EditListViewModel @Inject constructor(
 
     private fun openList(listId: Long?) {
         observeListJob?.cancel()
+        nextTemporaryItemId = FIRST_TEMPORARY_ITEM_ID
 
         if (listId == null) {
-            nextItemId = FIRST_ITEM_ID
             _uiState.value = initialUiState()
             return
         }
@@ -111,9 +111,6 @@ class EditListViewModel @Inject constructor(
             handleListDetailsLoadError()
             return
         }
-
-        nextItemId = (shoppingList.products.maxOfOrNull { item -> item.id } ?: 0L) + 1
-
         _uiState.update {
             it.copy(
                 isLoading = false,
@@ -198,6 +195,7 @@ class EditListViewModel @Inject constructor(
             }.onSuccess {
                 observeListJob?.cancel()
                 _uiResult.emit(EditListUiResult.OnListSaved)
+                nextTemporaryItemId = FIRST_TEMPORARY_ITEM_ID
                 _uiState.update { initialUiState() }
             }.onFailure { cause ->
                 Log.e("app", "error cause -> $cause")
@@ -213,8 +211,8 @@ class EditListViewModel @Inject constructor(
     }
 
     private fun newItem(): Product {
-        val id = nextItemId
-        nextItemId += 1
+        val id = nextTemporaryItemId
+        nextTemporaryItemId -= 1
         return Product(
             id = id,
             description = "",
@@ -225,8 +223,19 @@ class EditListViewModel @Inject constructor(
     }
 
     private fun formatToSaveList(shoppingList: ShoppingList): ShoppingList {
-        val filteredProductList = shoppingList.products.filter {
-            it.description.isNotEmpty()
+        val filteredProductList = shoppingList.products.mapNotNull { product ->
+            if (product.description.isBlank()) {
+                null
+            } else {
+                product.copy(
+                    id = if (product.id < PERSISTED_ITEM_ID_START) {
+                        NEW_ITEM_ID
+                    } else {
+                        product.id
+                    },
+                    description = product.description.trim(),
+                )
+            }
         }
 
         return shoppingList.copy(
@@ -235,6 +244,8 @@ class EditListViewModel @Inject constructor(
     }
 
     private companion object {
-        const val FIRST_ITEM_ID = 1L
+        const val FIRST_TEMPORARY_ITEM_ID = -1L
+        const val NEW_ITEM_ID = 0L
+        const val PERSISTED_ITEM_ID_START = 1L
     }
 }
