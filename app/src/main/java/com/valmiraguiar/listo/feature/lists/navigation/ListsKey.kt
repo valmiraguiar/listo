@@ -14,7 +14,7 @@ data class ListDetailsKey(val listId: Long) : NavKey
 data class EditListKey(val listId: Long? = null) : NavKey
 
 fun ListoNavigator.navigateToLists() {
-    navigate(ShoppingListsKey)
+    goToRouteAndClearStack(ShoppingListsKey)
 }
 
 fun ListoNavigator.navigateToListDetails(listId: Long) {

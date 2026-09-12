@@ -30,4 +30,9 @@ class ListoNavigator(
             add(route)
         }
     }
+
+    fun goToRouteAndClearStack(route: NavKey) {
+        state.stack.clear()
+        state.stack.add(route)
+    }
 }
