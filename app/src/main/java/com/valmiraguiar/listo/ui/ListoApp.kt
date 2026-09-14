@@ -20,7 +20,6 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.valmiraguiar.listo.core.navigation.ListoNavigator
 import com.valmiraguiar.listo.feature.common.components.ListoTopBar
-import com.valmiraguiar.listo.feature.lists.navigation.ListDetailsKey
 import com.valmiraguiar.listo.feature.lists.navigation.ShoppingListsKey
 import com.valmiraguiar.listo.feature.lists.navigation.listsEntry
 import com.valmiraguiar.listo.feature.login.navigation.loginEntry
@@ -47,7 +46,7 @@ fun ListoApp(
                 onBackClick = navigator::navigateBack,
                 showAccountButton = appState.navigationState.currentKey == ShoppingListsKey,
                 onAccountClick = navigator::navigateToLogin,
-                showResetButton = appState.navigationState.currentKey is ListDetailsKey,
+                showResetButton = onResetCheckedItems != null,
                 onResetClick = { onResetCheckedItems?.invoke() },
             )
         }

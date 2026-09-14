@@ -64,8 +64,16 @@ fun ShoppingListDetailsRoute(
         viewModel.dispatch(ShoppingListDetailsUiAction.SaveCheckedProducts)
     }
 
+    val hasCheckedItems = uiState.items.any { it.isChecked }
+    LaunchedEffect(hasCheckedItems) {
+        if (hasCheckedItems) {
+            onRegisterResetAction { viewModel.dispatch(ShoppingListDetailsUiAction.ResetCheckedItems) }
+        } else {
+            onRegisterResetAction(null)
+        }
+    }
+
     DisposableEffect(viewModel) {
-        onRegisterResetAction { viewModel.dispatch(ShoppingListDetailsUiAction.ResetCheckedItems) }
         onDispose {
             viewModel.dispatch(ShoppingListDetailsUiAction.SaveCheckedProducts)
             onRegisterResetAction(null)
