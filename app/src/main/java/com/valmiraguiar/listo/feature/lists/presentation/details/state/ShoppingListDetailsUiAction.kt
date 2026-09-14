@@ -9,4 +9,5 @@ sealed interface ShoppingListDetailsUiAction {
     data object EditListClick : ShoppingListDetailsUiAction
     data object BackClick : ShoppingListDetailsUiAction
     data object SaveCheckedProducts : ShoppingListDetailsUiAction
+    data object ResetCheckedItems : ShoppingListDetailsUiAction
 }

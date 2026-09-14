@@ -54,6 +54,7 @@ import com.valmiraguiar.listo.feature.lists.presentation.label
 fun ShoppingListDetailsRoute(
     listId: Long,
     onEditListClickNavigate: (Long) -> Unit,
+    onRegisterResetAction: ((() -> Unit)?) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ShoppingListDetailsViewModel,
 ) {
@@ -64,8 +65,10 @@ fun ShoppingListDetailsRoute(
     }
 
     DisposableEffect(viewModel) {
+        onRegisterResetAction { viewModel.dispatch(ShoppingListDetailsUiAction.ResetCheckedItems) }
         onDispose {
             viewModel.dispatch(ShoppingListDetailsUiAction.SaveCheckedProducts)
+            onRegisterResetAction(null)
         }
     }
 

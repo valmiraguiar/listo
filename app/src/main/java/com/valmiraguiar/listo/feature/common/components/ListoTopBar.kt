@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountBox
+import androidx.compose.material.icons.outlined.Deselect
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +40,8 @@ fun ListoTopBar(
     onBackClick: () -> Unit,
     showAccountButton: Boolean = false,
     onAccountClick: () -> Unit = {},
+    showResetButton: Boolean = false,
+    onResetClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -89,9 +92,26 @@ fun ListoTopBar(
             Spacer(modifier = Modifier.weight(1f))
 
             AnimatedVisibility(
+                visible = showResetButton,
+                enter = expandHorizontally(expandFrom = Alignment.End) + fadeIn(),
+                exit = shrinkHorizontally(shrinkTowards = Alignment.End) + fadeOut(),
+                modifier = Modifier.fillMaxHeight(),
+            ) {
+                IconButton(onClick = onResetClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.Deselect,
+                        contentDescription = stringResource(id = R.string.shopping_list_details_reset),
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(28.dp),
+                    )
+                }
+            }
+
+            AnimatedVisibility(
                 visible = showAccountButton,
-                enter = fadeIn(),
-                exit = fadeOut(),
+                enter = expandHorizontally(expandFrom = Alignment.End) + fadeIn(),
+                exit = shrinkHorizontally(shrinkTowards = Alignment.End) + fadeOut(),
+                modifier = Modifier.fillMaxHeight(),
             ) {
                 IconButton(onClick = onAccountClick) {
                     Icon(

@@ -9,7 +9,10 @@ import com.valmiraguiar.listo.feature.lists.presentation.edit.EditListRoute
 import com.valmiraguiar.listo.feature.lists.presentation.list.ShoppingListsRoute
 import com.valmiraguiar.listo.feature.login.navigation.navigateToLogin
 
-fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
+fun EntryProviderScope<NavKey>.listsEntry(
+    navigator: ListoNavigator,
+    onRegisterResetAction: ((() -> Unit)?) -> Unit,
+) {
     entry<ShoppingListsKey> {
         ShoppingListsRoute(
             onShoppingListClickNavigate = navigator::navigateToListDetails,
@@ -23,6 +26,7 @@ fun EntryProviderScope<NavKey>.listsEntry(navigator: ListoNavigator) {
         ShoppingListDetailsRoute(
             listId = key.listId,
             onEditListClickNavigate = { listId -> navigator.navigateToEditList(listId) },
+            onRegisterResetAction = onRegisterResetAction,
             viewModel = hiltViewModel(),
         )
     }

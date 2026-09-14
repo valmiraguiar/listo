@@ -61,6 +61,7 @@ class ShoppingListDetailsViewModel @Inject constructor(
             )
 
             is ShoppingListDetailsUiAction.SaveCheckedProducts -> saveCheckedProducts()
+            is ShoppingListDetailsUiAction.ResetCheckedItems -> resetCheckedItems()
         }
     }
 
@@ -146,6 +147,15 @@ class ShoppingListDetailsViewModel @Inject constructor(
                         item
                     }
                 }.sortedBy { item -> item.isChecked },
+            )
+        }
+        saveCheckedProducts()
+    }
+
+    private fun resetCheckedItems() {
+        _uiState.update { current ->
+            current.copy(
+                items = current.items.map { item -> item.copy(isChecked = false) },
             )
         }
         saveCheckedProducts()

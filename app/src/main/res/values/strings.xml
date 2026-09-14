@@ -29,6 +29,7 @@
     <string name="shopping_lists_delete">Excluir</string>
     <string name="shopping_list_details_title">Detalhes da lista</string>
     <string name="shopping_list_details_edit">Editar</string>
+    <string name="shopping_list_details_reset">Desmarcar todos</string>
     <string name="shopping_list_details_empty">Nenhum produto nesta lista.</string>
     <string name="shopping_list_details_not_found">Nenhuma lista foi encontrada para o id %1$d.</string>
     <string name="login_prompt_message">Faça login e mantenha suas listas salvas em nuvem.</string>
