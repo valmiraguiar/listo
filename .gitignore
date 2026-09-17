@@ -42,3 +42,6 @@ apikey.properties
 **/detekt.html
 **/detekt.xml
 **/detekt.txt
+
+# AI
+CLAUDE.md

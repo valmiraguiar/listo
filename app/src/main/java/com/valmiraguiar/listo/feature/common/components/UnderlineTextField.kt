@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -33,8 +34,8 @@ fun UnderlinedTextField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    placeholder: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
     trailingContent: (@Composable RowScope.() -> Unit)? = null,
@@ -53,6 +54,7 @@ fun UnderlinedTextField(
             fontWeight = FontWeight.Medium,
         ),
         keyboardOptions = keyboardOptions,
+        visualTransformation = visualTransformation,
         interactionSource = interactionSource,
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         decorationBox = { innerTextField ->
@@ -72,13 +74,6 @@ fun UnderlinedTextField(
                     Box(
                         modifier = Modifier.weight(1f),
                     ) {
-                        if (value.isEmpty() && placeholder != null) {
-                            Text(
-                                text = placeholder,
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.42f),
-                            )
-                        }
                         innerTextField()
                     }
                     if (trailingContent != null) {

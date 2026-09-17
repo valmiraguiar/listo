@@ -12,7 +12,6 @@ kotlinSerialization = "2.3.21"
 kspVersion = "2.3.6"
 lifecycleViewModelVersion = "2.10.0"
 lifecycleRuntimeVersion = "2.10.0"
-navigationVersion = "2.9.8"
 daggerHiltVersion = "2.59.2"
 hiltNavigation = "1.3.0"
 retrofitVersion = "3.0.0"
@@ -27,6 +26,8 @@ jetbrainsKotlinJvm = "2.3.21"
 nav3Version = "1.1.1"
 kotlinxSerializationCoreVersion = "1.11.0"
 lottieComposeVersion = "6.7.1"
+googleServicesVersion = "4.5.0"
+firebaseBomVersion = "34.19.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,7 +67,10 @@ androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testin
 dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "daggerHiltVersion" }
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinxSerializationCoreVersion" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieComposeVersion" }
-
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBomVersion"  }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics"}
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth"}
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutinesVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -77,3 +81,4 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref="detektVersion"}
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltVersion" }
 androidx-room = { id = "androidx.room", version.ref = "roomDbVersion"}
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesVersion"}

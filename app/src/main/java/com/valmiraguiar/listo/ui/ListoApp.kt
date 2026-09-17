@@ -57,7 +57,7 @@ fun ListoApp(
                 navigator = navigator,
                 onRegisterResetAction = { callback -> onResetCheckedItems = callback },
             )
-            loginEntry()
+            loginEntry(navigator)
         }
 
         Box(

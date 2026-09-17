@@ -34,7 +34,15 @@
     <string name="shopping_list_details_not_found">Nenhuma lista foi encontrada para o id %1$d.</string>
     <string name="login_prompt_message">Faça login e mantenha suas listas salvas em nuvem.</string>
     <string name="login_prompt_action">Realizar login</string>
-    <string name="login_screen_title">Login screen</string>
+    <string name="login_screen_title">Entrar</string>
+    <string name="login_email_label">E-mail</string>
+    <string name="login_password_label">Senha</string>
+    <string name="login_show_password">Mostrar senha</string>
+    <string name="login_hide_password">Ocultar senha</string>
+    <string name="login_submit">Entrar</string>
+    <string name="login_error_invalid_credentials">E-mail ou senha inválidos.</string>
+    <string name="login_error_network">Sem conexão com a internet. Tente novamente.</string>
+    <string name="login_error_unknown">Não foi possível fazer login. Tente novamente.</string>
     <string name="category_beverages">Bebidas</string>
     <string name="category_grocery">Mercado</string>
     <string name="category_dairy">Frios</string>

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -95,6 +96,7 @@ dependencies {
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.play.services)
 
     // Lottie
     implementation(libs.lottie.compose)
@@ -114,4 +116,9 @@ dependencies {
     // Hilt Test
     androidTestImplementation(libs.dagger.hilt.android.testing)
     testImplementation(libs.dagger.hilt.android.testing)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
 }
