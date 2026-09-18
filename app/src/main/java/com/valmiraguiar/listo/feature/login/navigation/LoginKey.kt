@@ -7,6 +7,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object LoginKey : NavKey
 
+@Serializable
+data object RegisterKey : NavKey
+
 fun ListoNavigator.navigateToLogin() {
     navigate(LoginKey)
+}
+
+fun ListoNavigator.navigateToRegister() {
+    navigate(RegisterKey)
 }

@@ -28,6 +28,8 @@ kotlinxSerializationCoreVersion = "1.11.0"
 lottieComposeVersion = "6.7.1"
 googleServicesVersion = "4.5.0"
 firebaseBomVersion = "34.19.0"
+androidxCredentialsVersion = "1.5.0"
+googleIdVersion = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,6 +73,9 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics"}
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth"}
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutinesVersion" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "androidxCredentialsVersion" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "androidxCredentialsVersion" }
+google-id = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleIdVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

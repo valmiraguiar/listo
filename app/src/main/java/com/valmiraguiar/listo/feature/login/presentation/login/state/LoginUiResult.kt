@@ -1,4 +1,4 @@
-package com.valmiraguiar.listo.feature.login.presentation.state
+package com.valmiraguiar.listo.feature.login.presentation.login.state
 
 sealed interface LoginUiResult {
     data object OnLoginSuccess : LoginUiResult
@@ -7,6 +7,7 @@ sealed interface LoginUiResult {
 
 enum class LoginError {
     InvalidCredentials,
+    AccountExists,
     Network,
     Unknown,
 }

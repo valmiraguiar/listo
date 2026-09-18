@@ -1,4 +1,4 @@
-package com.valmiraguiar.listo.feature.login.presentation.state
+package com.valmiraguiar.listo.feature.login.presentation.login.state
 
 data class LoginUiState(
     val email: String = "",

@@ -1,14 +1,16 @@
-package com.valmiraguiar.listo.feature.login.presentation
+package com.valmiraguiar.listo.feature.login.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valmiraguiar.listo.feature.login.domain.exception.AuthNetworkException
+import com.valmiraguiar.listo.feature.login.domain.exception.EmailAlreadyInUseException
 import com.valmiraguiar.listo.feature.login.domain.exception.InvalidCredentialsException
 import com.valmiraguiar.listo.feature.login.domain.usecase.LoginUseCase
-import com.valmiraguiar.listo.feature.login.presentation.state.LoginError
-import com.valmiraguiar.listo.feature.login.presentation.state.LoginUiAction
-import com.valmiraguiar.listo.feature.login.presentation.state.LoginUiResult
-import com.valmiraguiar.listo.feature.login.presentation.state.LoginUiState
+import com.valmiraguiar.listo.feature.login.domain.usecase.SignInWithGoogleUseCase
+import com.valmiraguiar.listo.feature.login.presentation.login.state.LoginError
+import com.valmiraguiar.listo.feature.login.presentation.login.state.LoginUiAction
+import com.valmiraguiar.listo.feature.login.presentation.login.state.LoginUiResult
+import com.valmiraguiar.listo.feature.login.presentation.login.state.LoginUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
+    private val signInWithGoogleUseCase: SignInWithGoogleUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
@@ -38,6 +41,7 @@ class LoginViewModel @Inject constructor(
             }
 
             is LoginUiAction.LoginClick -> login()
+            is LoginUiAction.GoogleSignIn -> loginWithGoogle(action.idToken)
         }
     }
 
@@ -45,23 +49,34 @@ class LoginViewModel @Inject constructor(
         val currentState = _uiState.value
         if (!currentState.canSubmit) return
 
+        authenticate {
+            loginUseCase(email = currentState.email.trim(), password = currentState.password)
+        }
+    }
+
+    private fun loginWithGoogle(idToken: String) {
+        authenticate { signInWithGoogleUseCase(idToken = idToken) }
+    }
+
+    private fun authenticate(action: suspend () -> Unit) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            runCatching {
-                loginUseCase(email = currentState.email.trim(), password = currentState.password)
-            }.onSuccess {
-                _uiState.update { it.copy(isLoading = false) }
-                _uiResult.emit(LoginUiResult.OnLoginSuccess)
-            }.onFailure { cause ->
-                _uiState.update { it.copy(isLoading = false) }
-                _uiResult.emit(LoginUiResult.OnError(error = cause.toLoginError()))
-            }
+            runCatching { action() }
+                .onSuccess {
+                    _uiState.update { it.copy(isLoading = false) }
+                    _uiResult.emit(LoginUiResult.OnLoginSuccess)
+                }
+                .onFailure { cause ->
+                    _uiState.update { it.copy(isLoading = false) }
+                    _uiResult.emit(LoginUiResult.OnError(error = cause.toLoginError()))
+                }
         }
     }
 
     private fun Throwable.toLoginError(): LoginError = when (this) {
         is InvalidCredentialsException -> LoginError.InvalidCredentials
+        is EmailAlreadyInUseException -> LoginError.AccountExists
         is AuthNetworkException -> LoginError.Network
         else -> LoginError.Unknown
     }
